@@ -1,0 +1,18 @@
+# for production only
+
+# block /swagger
+# block /api/health
+# block /api/healthz
+
+# export GIN_MODE=release
+# export ENV_PROD=production
+# export PG_SSLMODE=verify-full (or PG_SSLMODE=require)
+# export AIRDROP_PRIVATE_KEY=.....
+
+app:
+  env: "production"
+
+logger:
+  # zap config level
+  level: "info"
+  prod: true

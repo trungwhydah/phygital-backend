@@ -1,0 +1,164 @@
+def FULL_PATH
+def GKE_NAMESPACE
+def ARTIFACT_ENV
+def ARTIFACT_PRJ //dev+staging: `system-dev-3749090`; prod: `whydah-sys` 
+def ARTIFACT_REPO //depends on prj name + branch
+def GKE_PRJ
+def GKE_CLUSTER
+pipeline {
+  environment {
+    // project name
+    PRJ_NAME = "phygital"
+    // github
+    REPO_NAME = "phygital-core-backend"
+    // google cloud: artifact repo
+    ARTIFACT_REGION = "asia-southeast1-docker.pkg.dev"
+    ARTIFACT_IMG = "core-backend"
+    // google could: gke
+    GKE_REGION = "asia-southeast1"
+    GKE_POD = "core-backend"
+    GKE_CONTAINER = "core-backend-sha256-1"
+  }
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: dind-agent
+spec:
+  serviceAccountName: jenkins-admin
+  dnsConfig:
+    namesevers:
+      - 8.8.8.8
+  containers:
+  - name: dind
+    image: docker:latest
+    imagePullPolicy: Always
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - name: docker-graph-storage
+        mountPath: /var/lib/docker
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    command:
+    - cat
+    tty: true
+    securityContext:
+      runAsUser: 0
+    volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+  volumes:
+    - name: docker-graph-storage
+      emptyDir: {}
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+"""
+    }
+  }
+  stages {
+    stage('Git Pull') {
+        steps {
+            script {
+                container('dind') {
+                  if (!env.BRANCH_NAME){
+                   env.BRANCH_NAME = scm.branches[0].name
+                  }
+                  if (env.BRANCH_NAME == "main") {
+                    ARTIFACT_REPO = PRJ_NAME + "-dev"
+                    ARTIFACT_ENV = "dev-staging"
+                    ARTIFACT_PRJ = "system-dev-3749090"
+                    GKE_PRJ = "phygital-dev-388705"
+                    GKE_CLUSTER = "phygital-dev"
+                    GKE_NAMESPACE = "dev"
+                  }
+                  else if (env.BRANCH_NAME == "production") {
+                    ARTIFACT_REPO = PRJ_NAME
+                    ARTIFACT_ENV = "prod"
+                    ARTIFACT_PRJ = "whydah-sys"
+                    GKE_PRJ = "phygital"
+                    GKE_CLUSTER = "phygital-prod"
+                    GKE_NAMESPACE = "prod"
+                  }
+                  else if (env.BRANCH_NAME == "staging") {
+                    ARTIFACT_REPO = PRJ_NAME + "-staging"
+                    ARTIFACT_ENV = "dev-staging"
+                    ARTIFACT_PRJ = "system-dev-3749090"
+                    GKE_PRJ = "phygital-dev-388705" //as same as dev
+                    GKE_CLUSTER = "phygital-dev" //as same as dev
+                    GKE_NAMESPACE = "staging"                  
+                  }
+                  else {
+                    skipRemainingStages = true
+                    println "Not running CICD on other branches!"
+                  }
+                }
+            }
+        }
+    }
+    stage('Prepare') {
+      steps {
+        configFileProvider([configFile(fileId: "${env.REPO_NAME}_${env.BRANCH_NAME}_env", targetLocation:".env")]) {
+          sh "cat .env"
+        }
+        configFileProvider([configFile(fileId: "${env.REPO_NAME}_${env.BRANCH_NAME}_creds", targetLocation:"credential.json")]) {
+          sh "cat credential.json"
+        }
+      }
+    }
+    stage('Build') {
+      steps {
+        container('dind') {
+          script {
+            FULL_PATH = "${env.ARTIFACT_REGION}/${ARTIFACT_PRJ}/${ARTIFACT_REPO}/${env.ARTIFACT_IMG}:${env.GIT_COMMIT}-${env.BUILD_NUMBER}"
+            sh "ls -a"
+            sh "docker build --network host -t ${FULL_PATH} ."
+          }
+        }
+      }
+    }
+    stage('Push') {
+      steps {
+        container('dind') {
+          withCredentials([file(credentialsId: "gke_${ARTIFACT_ENV}_SA", variable: 'GC_KEY')]){
+            sh 'docker login -u _json_key --password-stdin https://$ARTIFACT_REGION < $GC_KEY'
+          }
+          sh "docker push ${FULL_PATH}"
+        }
+      }
+    }
+    stage('Connect Cluster And Deploy'){
+      steps {
+        container('kubectl'){
+          script {
+            withCredentials([file(credentialsId: "${GKE_PRJ}_${env.BRANCH_NAME}_kubectl", variable: 'TMPKUBECONFIG')]) {
+              sh 'cat "$TMPKUBECONFIG"'
+              sh 'cp "$TMPKUBECONFIG" /.kube/config'
+              sh "kubectl config set-context gke_${GKE_PRJ}_${env.GKE_REGION}_${GKE_CLUSTER}-jenkins --user=jenkins --cluster=gke_${GKE_PRJ}_${env.GKE_REGION}_${GKE_CLUSTER} --namespace=${GKE_NAMESPACE}"
+              sh "kubectl config use-context gke_${GKE_PRJ}_${env.GKE_REGION}_${GKE_CLUSTER}-jenkins"
+              sh "kubectl get pods"
+              sh "kubectl set image deployment --namespace=${GKE_NAMESPACE} ${env.GKE_POD} ${env.GKE_CONTAINER}=${FULL_PATH}"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo 'Publish a tag here'
+    }
+
+    unsuccessful {
+      echo 'Notify GoogleChat channel'
+    }
+  }
+
+}

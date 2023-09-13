@@ -1,0 +1,2473 @@
+basePath: /
+definitions:
+  entity.Author:
+    properties:
+      artworks_count:
+        type: string
+      avatar:
+        $ref: '#/definitions/entity.Media'
+      created_at:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      experience_year:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Firebase:
+    properties:
+      identities:
+        properties:
+          email:
+            items:
+              type: string
+            type: array
+          google.com:
+            items:
+              type: string
+            type: array
+        type: object
+      sign_in_provider:
+        type: string
+    type: object
+  entity.Media:
+    properties:
+      thumbnail_url:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  entity.Metadata:
+    properties:
+      animation_url:
+        type: string
+      attributes:
+        items:
+          $ref: '#/definitions/entity.MetadataAttribute'
+        type: array
+      description:
+        type: string
+      external_url:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+    type: object
+  entity.MetadataAttribute:
+    properties:
+      display_type:
+        type: string
+      trait_type:
+        type: string
+      value:
+        type: string
+    type: object
+  entity.Product:
+    properties:
+      attribute: {}
+      author_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      image:
+        $ref: '#/definitions/entity.Media'
+      org_id:
+        type: string
+      origin:
+        type: string
+      product_name:
+        type: string
+      rating_score:
+        type: number
+      status:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      template_id:
+        type: string
+      three_dimension:
+        $ref: '#/definitions/entity.Media'
+      total_item:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+      url_link:
+        type: string
+      video:
+        $ref: '#/definitions/entity.Media'
+    required:
+    - type
+    type: object
+  entity.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      firebase:
+        $ref: '#/definitions/entity.Firebase'
+      full_name:
+        type: string
+      id:
+        type: string
+      org_id:
+        type: string
+      organization:
+        type: string
+      picture:
+        type: string
+      role:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      wallet_address:
+        type: string
+    type: object
+  handler.APIResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      result: {}
+      x-request-id:
+        type: string
+    type: object
+  handler.RedirectResponse:
+    properties:
+      status_code:
+        type: integer
+      url:
+        type: string
+    type: object
+  presenter.AllProductItemResponse:
+    properties:
+      product_items_list:
+        items:
+          $ref: '#/definitions/presenter.ProductItemDetailWithOwnerResponse'
+        type: array
+    type: object
+  presenter.AllWebpagesResponse:
+    properties:
+      webpages_list:
+        items:
+          $ref: '#/definitions/presenter.WebpageDetailResponse'
+        type: array
+    type: object
+  presenter.DigitalAssetResponse:
+    properties:
+      chain:
+        type: string
+      chain_id:
+        type: integer
+      collection_id:
+        type: string
+      collection_name:
+        type: string
+      contract_address:
+        type: string
+      id:
+        type: string
+      metadata: {}
+      owner_email:
+        type: string
+      owner_full_name:
+        type: string
+      standard:
+        type: string
+      status:
+        type: string
+      token_id:
+        type: integer
+    type: object
+  presenter.GalleryProductItemsListResponse:
+    properties:
+      gallery_items:
+        items:
+          $ref: '#/definitions/presenter.GalleryProductItemsResponse'
+        type: array
+    type: object
+  presenter.GalleryProductItemsResponse:
+    properties:
+      chain:
+        type: string
+      collection_id:
+        type: string
+      collection_name:
+        type: string
+      contract_address:
+        type: string
+      craftsmen:
+        $ref: '#/definitions/presenter.StoryHomepageResponse'
+      digital_asset_id:
+        type: string
+      digital_asset_status:
+        type: string
+      homepage:
+        $ref: '#/definitions/presenter.StoryHomepageResponse'
+      pages:
+        items:
+          $ref: '#/definitions/presenter.StoryTemplatePagesResponse'
+        type: array
+      product_detail:
+        $ref: '#/definitions/entity.Product'
+      product_item_id:
+        type: string
+      standard:
+        type: string
+      tag_id:
+        type: string
+      token_id:
+        type: integer
+      total_like:
+        type: integer
+    type: object
+  presenter.GetAllMappingResponse:
+    properties:
+      mapping:
+        items:
+          $ref: '#/definitions/presenter.Mapping'
+        type: array
+    type: object
+  presenter.ListDigitalAssetsResponse:
+    properties:
+      digital_assets:
+        items:
+          $ref: '#/definitions/presenter.DigitalAssetResponse'
+        type: array
+    type: object
+  presenter.ListProductResponse:
+    properties:
+      product_list:
+        items:
+          $ref: '#/definitions/presenter.ProductResponse'
+        type: array
+    type: object
+  presenter.ListTemplateResponse:
+    properties:
+      template_list:
+        items:
+          $ref: '#/definitions/presenter.TemplateResponse'
+        type: array
+    type: object
+  presenter.Mapping:
+    properties:
+      claimable:
+        type: boolean
+      collection_id:
+        type: string
+      digital_asset_id:
+        type: string
+      digital_asset_status:
+        type: string
+      external_url:
+        type: string
+      org_id:
+        type: string
+      owner_email:
+        type: string
+      owner_id:
+        type: string
+      owner_name:
+        type: string
+      product_item_id:
+        type: string
+      tag_id:
+        type: string
+      token_id:
+        type: integer
+    type: object
+  presenter.OrganizationDetailResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      org_logo_url:
+        type: string
+      org_name:
+        type: string
+      org_tag_name:
+        type: string
+      owner_id:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  presenter.OrganizationListResponse:
+    properties:
+      org_list:
+        items:
+          $ref: '#/definitions/presenter.OrganizationResponse'
+        type: array
+    type: object
+  presenter.OrganizationResponse:
+    properties:
+      org_id:
+        type: string
+      org_logo_url:
+        type: string
+      org_name:
+        type: string
+      org_tag_name:
+        type: string
+    type: object
+  presenter.ProductItemDetailResponse:
+    properties:
+      farm_name:
+        type: string
+      id:
+        type: string
+      item_index:
+        type: integer
+      owner_id:
+        type: string
+      process:
+        type: string
+      product_id:
+        type: string
+      product_name:
+        type: string
+      rating_score:
+        type: number
+      total_like:
+        type: integer
+      varietal:
+        type: string
+    type: object
+  presenter.ProductItemDetailWithOwnerResponse:
+    properties:
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      id:
+        type: string
+      item_index:
+        type: integer
+      name:
+        type: string
+      organization:
+        type: string
+      owner_id:
+        type: string
+      picture:
+        type: string
+      product_id:
+        type: string
+      product_name:
+        type: string
+      role:
+        type: string
+      status:
+        type: string
+      total_like:
+        type: integer
+    type: object
+  presenter.ProductResponse:
+    properties:
+      organization:
+        $ref: '#/definitions/presenter.OrganizationDetailResponse'
+      product:
+        $ref: '#/definitions/entity.Product'
+    type: object
+  presenter.StoryDetailResponse:
+    properties:
+      digital_asset_detail:
+        $ref: '#/definitions/presenter.StoryDigitalAssetResponse'
+      homepage_detail:
+        $ref: '#/definitions/presenter.StoryHomepageResponse'
+      mapping_detail:
+        $ref: '#/definitions/presenter.StoryMappingResponse'
+      organization_detail:
+        $ref: '#/definitions/presenter.StoryOrganizationResponse'
+      owner_detail:
+        $ref: '#/definitions/presenter.StoryOwnerResponse'
+      product_detail:
+        $ref: '#/definitions/entity.Product'
+      product_item_detail:
+        $ref: '#/definitions/presenter.StoryProductItemResponse'
+      template_detail:
+        $ref: '#/definitions/presenter.StoryTemplateResponse'
+    type: object
+  presenter.StoryDigitalAssetResponse:
+    properties:
+      chain:
+        type: string
+      collection_id:
+        type: string
+      collection_name:
+        type: string
+      contract_address:
+        type: string
+      digital_asset_id:
+        type: string
+      standard:
+        type: string
+      status:
+        type: string
+      token_id:
+        type: integer
+    type: object
+  presenter.StoryHomepageResponse:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      url_link:
+        type: string
+    type: object
+  presenter.StoryMappingResponse:
+    properties:
+      claimable:
+        type: boolean
+      external_url:
+        type: string
+    type: object
+  presenter.StoryOrganizationResponse:
+    properties:
+      org_id:
+        type: string
+      org_logo_url:
+        type: string
+      org_name:
+        type: string
+      org_tag_name:
+        type: string
+    type: object
+  presenter.StoryOwnerResponse:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      owner_id:
+        type: string
+    type: object
+  presenter.StoryProductItemResponse:
+    properties:
+      item_index:
+        type: integer
+      product_item_id:
+        type: string
+      total_like:
+        type: integer
+    type: object
+  presenter.StoryTemplateMenuResponse:
+    properties:
+      title:
+        $ref: '#/definitions/presenter.StoryTemplateMenuTitleResponse'
+      url:
+        type: string
+    type: object
+  presenter.StoryTemplateMenuTitleResponse:
+    properties:
+      en:
+        type: string
+      vi:
+        type: string
+    type: object
+  presenter.StoryTemplatePagesResponse:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      name:
+        type: string
+      page_id:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  presenter.StoryTemplateResponse:
+    properties:
+      category:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      menu:
+        items:
+          $ref: '#/definitions/presenter.StoryTemplateMenuResponse'
+        type: array
+      name:
+        type: string
+      pages:
+        items:
+          $ref: '#/definitions/presenter.StoryTemplatePagesResponse'
+        type: array
+      template_id:
+        type: string
+    type: object
+  presenter.TemplateMenuResponse:
+    properties:
+      page_id:
+        type: string
+      title:
+        $ref: '#/definitions/presenter.TemplateMenuTitleResponse'
+    type: object
+  presenter.TemplateMenuTitleResponse:
+    properties:
+      en:
+        type: string
+      vi:
+        type: string
+    type: object
+  presenter.TemplatePagesResponse:
+    properties:
+      page_id:
+        type: string
+    type: object
+  presenter.TemplateResponse:
+    properties:
+      category:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      menu:
+        items:
+          $ref: '#/definitions/presenter.TemplateMenuResponse'
+        type: array
+      name:
+        type: string
+      pages:
+        items:
+          $ref: '#/definitions/presenter.TemplatePagesResponse'
+        type: array
+      template_id:
+        type: string
+    type: object
+  presenter.TemplateWebpagesMenuResponse:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      category:
+        type: string
+      created_at:
+        type: string
+      name:
+        type: string
+      page_id:
+        type: string
+      status:
+        type: string
+      title:
+        $ref: '#/definitions/presenter.TemplateMenuTitleResponse'
+      type:
+        type: string
+      updated_at:
+        type: string
+      url_link:
+        type: string
+    type: object
+  presenter.TemplateWebpagesPagesResponse:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      category:
+        type: string
+      created_at:
+        type: string
+      name:
+        type: string
+      page_id:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+      url_link:
+        type: string
+    type: object
+  presenter.TemplateWebpagesResponse:
+    properties:
+      category:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      menu:
+        items:
+          $ref: '#/definitions/presenter.TemplateWebpagesMenuResponse'
+        type: array
+      name:
+        type: string
+      pages:
+        items:
+          $ref: '#/definitions/presenter.TemplateWebpagesPagesResponse'
+        type: array
+      template_id:
+        type: string
+    type: object
+  presenter.UploadResponse:
+    properties:
+      image_paths:
+        items:
+          type: string
+        type: array
+    type: object
+  presenter.WebpageDetailResponse:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      category:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+      url_link:
+        type: string
+    type: object
+  request.CreateTemplateRequest:
+    properties:
+      category:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      menu:
+        items:
+          $ref: '#/definitions/request.TemplateMenuRequest'
+        type: array
+      name:
+        type: string
+      pages:
+        items:
+          $ref: '#/definitions/request.TemplatePagesRequest'
+        type: array
+    type: object
+  request.CreateWebpageRequest:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      category:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      url_link:
+        type: string
+    type: object
+  request.TemplateMenuRequest:
+    properties:
+      page_id:
+        type: string
+      title:
+        $ref: '#/definitions/request.TemplateMenuTitleRequest'
+    type: object
+  request.TemplateMenuTitleRequest:
+    properties:
+      en:
+        type: string
+      vi:
+        type: string
+    type: object
+  request.TemplatePagesRequest:
+    properties:
+      page_id:
+        type: string
+    type: object
+  request.UnmapRequest:
+    properties:
+      product_item_id:
+        type: string
+    required:
+    - product_item_id
+    type: object
+  request.UpdateMappingRequest:
+    properties:
+      claimable:
+        type: boolean
+      digital_asset_id:
+        type: string
+      external_url:
+        type: string
+      org_id:
+        type: string
+      product_item_id:
+        type: string
+    type: object
+  request.UpdateTemplateRequest:
+    properties:
+      category:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      menu:
+        items:
+          $ref: '#/definitions/request.TemplateMenuRequest'
+        type: array
+      name:
+        type: string
+      pages:
+        items:
+          $ref: '#/definitions/request.TemplatePagesRequest'
+        type: array
+    type: object
+  request.UpdateUserDetailsRequest:
+    properties:
+      full_name:
+        type: string
+      picture:
+        type: string
+      wallet_address:
+        type: string
+    type: object
+  request.UpdateWebpageRequest:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      category:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      url_link:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@kardialab.io
+    name: API Support
+    url: https://fygito.com//support
+  description: A book management service API in Go using Gin framework..
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Phygital Core Backend API
+  version: "1.0"
+paths:
+  /admin/author:
+    get:
+      description: Get List of author
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get List of Author
+  /admin/author/create:
+    post:
+      consumes:
+      - application/json
+      description: Create author
+      parameters:
+      - description: Create an author
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Author'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Author
+  /admin/digital-asset:
+    get:
+      description: Get All Digital Assets Or By Org Tag Name
+      parameters:
+      - description: Organization Tag Name Query
+        in: query
+        name: org_tag_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.ListDigitalAssetsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Digital Assets Or By Org Tag Name
+      tags:
+      - digital-asset
+  /admin/digital-asset/sync-metadata:
+    put:
+      description: Sync Digital Assets Metadata (As metadata format can change so
+        use this API to update the correct one to the DB)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Sync Digital Assets Metadata
+      tags:
+      - digital-asset
+  /admin/mapping:
+    get:
+      description: Get all mapping (of 1 org or all orgs (required super admin, leave
+        org tag name empty))
+      parameters:
+      - description: Organization Tag Name Query
+        in: query
+        name: org_tag_name
+        type: string
+      - description: Is Already Mapped? Query
+        in: query
+        name: is_mapped
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.GetAllMappingResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Mapping (Of 1 Org/All Orgs)
+      tags:
+      - mapping
+  /admin/mapping/{tag_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Unmap Tag and Product Item (that is currently mapped)
+      parameters:
+      - description: Tag ID
+        in: path
+        name: tag_id
+        required: true
+        type: string
+      - description: Unmap Request
+        in: body
+        name: unmap_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UnmapRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Unmap Tag and Product Item (that is currently mapped)
+      tags:
+      - mapping
+    put:
+      consumes:
+      - application/json
+      description: Update mapping (Identify mapping by tag_id, Only update fields
+        that are given in json body)
+      parameters:
+      - description: Tag ID
+        in: path
+        name: tag_id
+        required: true
+        type: string
+      - description: Update Mapping Request
+        in: body
+        name: update_mapping_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateMappingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Mapping
+      tags:
+      - mapping
+  /admin/mapping/product/{product_id}:
+    get:
+      description: Get All Mapping For Product (Unmapped Mappings And Mappings Of
+        That Product)
+      parameters:
+      - description: Product ID Param
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: Is Already Mapped? Query
+        in: query
+        name: is_mapped
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.GetAllMappingResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Mapping For Product (Unmapped Mappings And Mappings Of That
+        Product)
+      tags:
+      - mapping
+  /admin/organization:
+    get:
+      description: Get all organizations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.OrganizationListResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Organizations
+      tags:
+      - organization
+  /admin/organization/{org_id}:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update Organization
+      parameters:
+      - description: Organization ID Param
+        in: path
+        name: org_id
+        required: true
+        type: string
+      - in: formData
+        name: org_logo_url
+        type: string
+      - in: formData
+        name: org_name
+        type: string
+      - in: formData
+        name: org_tag_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Organization
+      tags:
+      - organization
+  /admin/organization/{org_tag_name}:
+    get:
+      description: Get Detail Organization
+      parameters:
+      - description: Organization Tag Name
+        in: path
+        name: org_tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.OrganizationResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Detail Organization
+      tags:
+      - organization
+  /admin/organization/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create organization
+      parameters:
+      - in: formData
+        name: org_logo_url
+        type: string
+      - in: formData
+        name: org_name
+        required: true
+        type: string
+      - in: formData
+        name: org_tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.OrganizationResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Organization
+      tags:
+      - organization
+  /admin/product:
+    get:
+      description: Get All Products
+      parameters:
+      - description: Organization Tag Name (get all products if empty)
+        in: query
+        name: org_tag_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              allOf:
+              - $ref: '#/definitions/handler.APIResponse'
+              - properties:
+                  result:
+                    $ref: '#/definitions/presenter.ListProductResponse'
+                type: object
+            type: array
+        "203":
+          description: Non-Authoritative Information
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Products
+      tags:
+      - product
+  /admin/product-item:
+    get:
+      description: Return ProductItems with is_mapped and product_id filters
+      parameters:
+      - description: Product ID Query
+        in: query
+        name: product_id
+        required: true
+        type: string
+      - description: Is Already Mapped? Query
+        in: query
+        name: is_mapped
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.AllProductItemResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all product items with filter
+      tags:
+      - product-item
+  /admin/product-item/{product_item_id}/mint:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Mint Product Item
+      parameters:
+      - description: Product Item ID
+        in: path
+        name: product_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Mint Product Item
+      tags:
+      - product-item
+  /admin/product-item/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create product item
+      parameters:
+      - in: formData
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.ProductItemDetailResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Product Item
+      tags:
+      - product-item
+  /admin/product-item/create-multiple:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create Multiple Product Item
+      parameters:
+      - in: formData
+        name: num_item
+        required: true
+        type: integer
+      - in: formData
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Multiple Product Item
+      tags:
+      - product-item
+  /admin/product-item/organization/{org_tag_name}:
+    get:
+      description: Get All Product Items In A Specific Organization
+      parameters:
+      - description: Organization Tag Name Param
+        in: path
+        name: org_tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.AllProductItemResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Product Items In A Specific Organization
+      tags:
+      - product-item
+  /admin/product/{product_id}:
+    delete:
+      description: Delete product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Product By ID
+      tags:
+      - product
+    get:
+      description: Get product detail
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.ProductResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Product Detail
+      tags:
+      - product
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update product detail
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: Update Product Request
+        in: body
+        name: update_product_detail
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Product Detail
+      tags:
+      - product
+  /admin/product/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create product
+      parameters:
+      - description: Create Product Request
+        in: body
+        name: create_product_request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Product
+      tags:
+      - product
+  /admin/tag/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create tag
+      parameters:
+      - in: formData
+        name: encrypt_mode
+        type: string
+      - in: formData
+        name: hardware_id
+        type: string
+      - in: formData
+        name: org_id
+        required: true
+        type: string
+      - in: formData
+        name: raw_data
+        type: string
+      - in: formData
+        name: scan_counter
+        type: integer
+      - in: formData
+        name: tag_id
+        required: true
+        type: string
+      - in: formData
+        name: tag_type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Tag
+      tags:
+      - tag
+  /admin/template/{template_id}:
+    get:
+      description: Get template
+      parameters:
+      - description: Template ID
+        in: path
+        name: template_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.TemplateWebpagesResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Template
+      tags:
+      - template
+    put:
+      consumes:
+      - application/json
+      description: Update Template
+      parameters:
+      - description: Template ID
+        in: path
+        name: template_id
+        required: true
+        type: string
+      - description: Update Template Request
+        in: body
+        name: update_template_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateTemplateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Template
+      tags:
+      - template
+  /admin/template/all:
+    get:
+      description: get all templates
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.ListTemplateResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Templates
+      tags:
+      - template
+  /admin/template/create:
+    post:
+      consumes:
+      - application/json
+      description: Create template
+      parameters:
+      - description: Create Template Request
+        in: body
+        name: create_template_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateTemplateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Template
+      tags:
+      - template
+  /admin/user/role:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update User Role To Firebase and DB
+      parameters:
+      - in: formData
+        name: new_role
+        required: true
+        type: string
+      - in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User Role To Firebase and DB
+      tags:
+      - user
+  /admin/user/sync-wallet-address:
+    put:
+      description: Sync Wallet Address Of Users Who Haven't Had
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Sync Wallet Address Of Users Who Haven't Had
+      tags:
+      - user
+  /admin/web-page/{webpage_id}:
+    delete:
+      description: Delete webpage
+      parameters:
+      - description: Webpage ID
+        in: path
+        name: webpage_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Webpage
+      tags:
+      - webpage
+    put:
+      consumes:
+      - application/json
+      description: Update webpages by id from DB
+      parameters:
+      - description: Webpage ID
+        in: path
+        name: webpage_id
+        required: true
+        type: string
+      - description: Update Webpage Request
+        in: body
+        name: update_webpage_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateWebpageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Webpage by ID
+      tags:
+      - webpage
+  /admin/web-page/all:
+    get:
+      description: Get list of all webpages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.AllWebpagesResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get List Of All Webpages
+      tags:
+      - webpage
+  /admin/web-page/create:
+    post:
+      consumes:
+      - application/json
+      description: Create webpage
+      parameters:
+      - description: Create Webpage Request
+        in: body
+        name: create_webpage_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateWebpageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Webpage
+      tags:
+      - webpage
+  /author/:author_id:
+    get:
+      description: Get Author information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Author information
+  /competition/{org_tag_name}:
+    get:
+      description: Get Gallery Of Product Items Of A Competition
+      parameters:
+      - description: Organization Tag Name (Competition Name)
+        in: path
+        name: org_tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              allOf:
+              - $ref: '#/definitions/handler.APIResponse'
+              - properties:
+                  result:
+                    $ref: '#/definitions/presenter.GalleryProductItemsListResponse'
+                type: object
+            type: array
+        "203":
+          description: Non-Authoritative Information
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Gallery Of Product Items Of A Competition
+      tags:
+      - competition
+  /competition/v2/{org_tag_name}:
+    get:
+      description: Get Gallery Of Product Items Of A Competition V2
+      parameters:
+      - description: Organization Tag Name (Competition Name)
+        in: path
+        name: org_tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              allOf:
+              - $ref: '#/definitions/handler.APIResponse'
+              - properties:
+                  result:
+                    $ref: '#/definitions/presenter.GalleryProductItemsListResponse'
+                type: object
+            type: array
+        "203":
+          description: Non-Authoritative Information
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Gallery Of Product Items Of A Competition V2
+      tags:
+      - competition
+  /digital-asset/{org_tag_name}/{token_id}:
+    get:
+      description: Get Digital Asset Metadata By Org tag name and token ID
+      parameters:
+      - description: organization tag name
+        in: path
+        name: org_tag_name
+        required: true
+        type: string
+      - description: Token ID
+        in: path
+        name: token_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.Metadata'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Digital Asset Metadata By Org tag name and token ID
+      tags:
+      - digital-asset
+  /product-item/{product_item_id}/claim:
+    put:
+      description: Claim product item
+      parameters:
+      - description: Product Item ID
+        in: path
+        name: product_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Claim Product Item
+      tags:
+      - product-item user
+  /product-item/{product_item_id}/detail:
+    get:
+      description: Get detail of product item
+      parameters:
+      - description: Product Item ID
+        in: path
+        name: product_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.ProductItemDetailResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Detail Of Product Item
+      tags:
+      - product-item user
+  /product-item/{product_item_id}/like:
+    post:
+      description: Like Product Item
+      parameters:
+      - description: Product Item ID
+        in: path
+        name: product_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Like Product Item
+      tags:
+      - product-item user
+  /product-item/{product_item_id}/toggle-claimable:
+    put:
+      description: Toggle Claimable Item
+      parameters:
+      - description: Product Item ID
+        in: path
+        name: product_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Toggle Claimable Item
+      tags:
+      - product-item user
+  /product-item/story:
+    get:
+      description: Get Story Detail By Tag ID
+      parameters:
+      - description: Tag ID Query
+        in: query
+        name: tag_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.StoryDetailResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Story Detail By Tag ID
+      tags:
+      - product-item user
+  /product/seo:
+    get:
+      description: Get Product Detail By Tag ID
+      parameters:
+      - description: Tag ID Query
+        in: query
+        name: tag_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Product Detail By Tag ID
+      tags:
+      - seo
+  /pubsub/upsert-user:
+    post:
+      consumes:
+      - application/json
+      description: Upsert user
+      parameters:
+      - description: Pubsub Received Message
+        in: body
+        name: pubsub_received_message
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Upsert User
+      tags:
+      - pubsub
+  /scan/nfc/tap/{tag_id}:
+    get:
+      description: nfc tap
+      parameters:
+      - description: Tag ID
+        in: path
+        name: tag_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/handler.RedirectResponse'
+        "303":
+          description: See Other
+          schema:
+            $ref: '#/definitions/handler.RedirectResponse'
+      summary: NFC Tap
+      tags:
+      - scan
+  /scan/nfc/verify:
+    get:
+      consumes:
+      - multipart/form-data
+      description: Nfc verify scan
+      parameters:
+      - in: formData
+        name: cmac
+        type: string
+      - in: formData
+        name: enc
+        type: string
+      - in: formData
+        name: picc_data
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/handler.RedirectResponse'
+        "303":
+          description: See Other
+          schema:
+            $ref: '#/definitions/handler.RedirectResponse'
+      summary: NFC Verify Scan
+      tags:
+      - scan
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload video/image
+      parameters:
+      - description: Files
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.UploadResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Upload Video/Image
+      tags:
+      - upload
+  /user:
+    get:
+      description: Get User Details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User Details
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Update User Details
+      parameters:
+      - description: Update User Details Request
+        in: body
+        name: update_user_details_request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateUserDetailsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User Details
+      tags:
+      - user
+  /user/org:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update User Org To Firebase and DB
+      parameters:
+      - in: formData
+        name: new_org_tag_name
+        required: true
+        type: string
+      - in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User Org To Firebase and DB
+      tags:
+      - user
+  /web-page/{webpage_id}:
+    get:
+      description: Get webPage by ID from DB
+      parameters:
+      - description: Webpage ID
+        in: path
+        name: webpage_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/presenter.WebpageDetailResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      summary: Get Webpage By ID
+      tags:
+      - webpage user
+securityDefinitions:
+  ApiKeyAuth:
+    description: Description for what is this security definition being used
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

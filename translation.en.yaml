@@ -1,0 +1,15 @@
+error:
+  system:
+    internal: Hệ thống đang bị lỗi. Vui lòng thử lại sau!
+  authentication:
+    no_permission: Không có quyền truy cập vào hệ thống. Vui lòng kiểm tra lại lỗi {{.msg_err}}
+    invalid_auth_token_format: Định dạng xác thực cho header không đúng, vui lòng kiểm tra lại theo chuẩn `Bearer $Token`
+    not_support_auth_type: Không hỗ trợ phương thức xác thực này, vui lòng thử lại.
+    invalid_signature: Chữ ký không hợp lệ.
+  http_validator:
+    invalid_filed_type: Thông tin yêu cầu không hợp lệ vui long kiểm tra lỗi {{.msg_err}}
+    missing_required_field: Vui lòng bổ sung giá trị cho {{.field}} để tiếp tục.
+    decode_fail: Decode thông tin request lỗi. Vui lòng kiểm tra lại lỗi {{.msg_err}}
+  database:
+    missing_update_data: Số lượng document được update không đủ so với yêu cầu.
+    not_found: Item not found

@@ -1,0 +1,12 @@
+app:
+  name: "marketplacee"
+  env: "production"
+  version: "1.0.0"
+
+http:
+  port: 8080
+
+logger:
+  # zap config level
+  level: "info"
+  prod: true

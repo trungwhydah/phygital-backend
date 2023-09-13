@@ -1,0 +1,4057 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A book management service API in Go using Gin framework..",
+        "title": "Phygital Core Backend API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "https://fygito.com//support",
+            "email": "support@kardialab.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/admin/author": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get List of author",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get List of Author",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/author/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create author",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create Author",
+                "parameters": [
+                    {
+                        "description": "Create an author",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Author"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/digital-asset": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get All Digital Assets Or By Org Tag Name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "digital-asset"
+                ],
+                "summary": "Get All Digital Assets Or By Org Tag Name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name Query",
+                        "name": "org_tag_name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.ListDigitalAssetsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/digital-asset/sync-metadata": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Sync Digital Assets Metadata (As metadata format can change so use this API to update the correct one to the DB)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "digital-asset"
+                ],
+                "summary": "Sync Digital Assets Metadata",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/mapping": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all mapping (of 1 org or all orgs (required super admin, leave org tag name empty))",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mapping"
+                ],
+                "summary": "Get All Mapping (Of 1 Org/All Orgs)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name Query",
+                        "name": "org_tag_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Is Already Mapped? Query",
+                        "name": "is_mapped",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.GetAllMappingResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/mapping/product/{product_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get All Mapping For Product (Unmapped Mappings And Mappings Of That Product)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mapping"
+                ],
+                "summary": "Get All Mapping For Product (Unmapped Mappings And Mappings Of That Product)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID Param",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Is Already Mapped? Query",
+                        "name": "is_mapped",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.GetAllMappingResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/mapping/{tag_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update mapping (Identify mapping by tag_id, Only update fields that are given in json body)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mapping"
+                ],
+                "summary": "Update Mapping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag ID",
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Mapping Request",
+                        "name": "update_mapping_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateMappingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Unmap Tag and Product Item (that is currently mapped)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mapping"
+                ],
+                "summary": "Unmap Tag and Product Item (that is currently mapped)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag ID",
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Unmap Request",
+                        "name": "unmap_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UnmapRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/organization": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all organizations",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Get All Organizations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.OrganizationListResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/organization/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create organization",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Create Organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "org_logo_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_tag_name",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.OrganizationResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/organization/{org_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update Organization",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Update Organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID Param",
+                        "name": "org_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_logo_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_tag_name",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/organization/{org_tag_name}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Detail Organization",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Get Detail Organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name",
+                        "name": "org_tag_name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.OrganizationResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get All Products",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get All Products",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name (get all products if empty)",
+                        "name": "org_tag_name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/handler.APIResponse"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "result": {
+                                                "$ref": "#/definitions/presenter.ListProductResponse"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "203": {
+                        "description": "Non-Authoritative Information",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product-item": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Return ProductItems with is_mapped and product_id filters",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item"
+                ],
+                "summary": "Get all product items with filter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID Query",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Is Already Mapped? Query",
+                        "name": "is_mapped",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.AllProductItemResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product-item/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create product item",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item"
+                ],
+                "summary": "Create Product Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "product_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.ProductItemDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product-item/create-multiple": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create Multiple Product Item",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item"
+                ],
+                "summary": "Create Multiple Product Item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "num_item",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "product_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product-item/organization/{org_tag_name}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get All Product Items In A Specific Organization",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item"
+                ],
+                "summary": "Get All Product Items In A Specific Organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name Param",
+                        "name": "org_tag_name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.AllProductItemResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product-item/{product_item_id}/mint": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Mint Product Item",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item"
+                ],
+                "summary": "Mint Product Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Item ID",
+                        "name": "product_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create product",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create Product",
+                "parameters": [
+                    {
+                        "description": "Create Product Request",
+                        "name": "create_product_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product/{product_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get product detail",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get Product Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.ProductResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update product detail",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update Product Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Product Request",
+                        "name": "update_product_detail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete product by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete Product By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/tag/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create tag",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag"
+                ],
+                "summary": "Create Tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "encrypt_mode",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "hardware_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "org_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "raw_data",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "scan_counter",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "tag_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "tag_type",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/template/all": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get all templates",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "template"
+                ],
+                "summary": "Get All Templates",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.ListTemplateResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/template/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "template"
+                ],
+                "summary": "Create Template",
+                "parameters": [
+                    {
+                        "description": "Create Template Request",
+                        "name": "create_template_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateTemplateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/template/{template_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get template",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "template"
+                ],
+                "summary": "Get Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Template ID",
+                        "name": "template_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.TemplateWebpagesResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "template"
+                ],
+                "summary": "Update Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Template ID",
+                        "name": "template_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Template Request",
+                        "name": "update_template_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateTemplateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/role": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update User Role To Firebase and DB",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update User Role To Firebase and DB",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "new_role",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "user_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/sync-wallet-address": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Sync Wallet Address Of Users Who Haven't Had",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Sync Wallet Address Of Users Who Haven't Had",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/web-page/all": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list of all webpages",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webpage"
+                ],
+                "summary": "Get List Of All Webpages",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.AllWebpagesResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/web-page/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create webpage",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webpage"
+                ],
+                "summary": "Create Webpage",
+                "parameters": [
+                    {
+                        "description": "Create Webpage Request",
+                        "name": "create_webpage_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateWebpageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/web-page/{webpage_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update webpages by id from DB",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webpage"
+                ],
+                "summary": "Update Webpage by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Webpage ID",
+                        "name": "webpage_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Webpage Request",
+                        "name": "update_webpage_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateWebpageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete webpage",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webpage"
+                ],
+                "summary": "Delete Webpage",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Webpage ID",
+                        "name": "webpage_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/author/:author_id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Author information",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Author information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/competition/v2/{org_tag_name}": {
+            "get": {
+                "description": "Get Gallery Of Product Items Of A Competition V2",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "competition"
+                ],
+                "summary": "Get Gallery Of Product Items Of A Competition V2",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name (Competition Name)",
+                        "name": "org_tag_name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/handler.APIResponse"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "result": {
+                                                "$ref": "#/definitions/presenter.GalleryProductItemsListResponse"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "203": {
+                        "description": "Non-Authoritative Information",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/competition/{org_tag_name}": {
+            "get": {
+                "description": "Get Gallery Of Product Items Of A Competition",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "competition"
+                ],
+                "summary": "Get Gallery Of Product Items Of A Competition",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization Tag Name (Competition Name)",
+                        "name": "org_tag_name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/handler.APIResponse"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "result": {
+                                                "$ref": "#/definitions/presenter.GalleryProductItemsListResponse"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "203": {
+                        "description": "Non-Authoritative Information",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/digital-asset/{org_tag_name}/{token_id}": {
+            "get": {
+                "description": "Get Digital Asset Metadata By Org tag name and token ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "digital-asset"
+                ],
+                "summary": "Get Digital Asset Metadata By Org tag name and token ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "organization tag name",
+                        "name": "org_tag_name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Token ID",
+                        "name": "token_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.Metadata"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product-item/story": {
+            "get": {
+                "description": "Get Story Detail By Tag ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item user"
+                ],
+                "summary": "Get Story Detail By Tag ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag ID Query",
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.StoryDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product-item/{product_item_id}/claim": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Claim product item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item user"
+                ],
+                "summary": "Claim Product Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Item ID",
+                        "name": "product_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product-item/{product_item_id}/detail": {
+            "get": {
+                "description": "Get detail of product item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item user"
+                ],
+                "summary": "Get Detail Of Product Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Item ID",
+                        "name": "product_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.ProductItemDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product-item/{product_item_id}/like": {
+            "post": {
+                "description": "Like Product Item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item user"
+                ],
+                "summary": "Like Product Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Item ID",
+                        "name": "product_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product-item/{product_item_id}/toggle-claimable": {
+            "put": {
+                "description": "Toggle Claimable Item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-item user"
+                ],
+                "summary": "Toggle Claimable Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Item ID",
+                        "name": "product_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/seo": {
+            "get": {
+                "description": "Get Product Detail By Tag ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "seo"
+                ],
+                "summary": "Get Product Detail By Tag ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag ID Query",
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.Product"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/pubsub/upsert-user": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Upsert user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pubsub"
+                ],
+                "summary": "Upsert User",
+                "parameters": [
+                    {
+                        "description": "Pubsub Received Message",
+                        "name": "pubsub_received_message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/scan/nfc/tap/{tag_id}": {
+            "get": {
+                "description": "nfc tap",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "scan"
+                ],
+                "summary": "NFC Tap",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag ID",
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RedirectResponse"
+                        }
+                    },
+                    "303": {
+                        "description": "See Other",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RedirectResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/scan/nfc/verify": {
+            "get": {
+                "description": "Nfc verify scan",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "scan"
+                ],
+                "summary": "NFC Verify Scan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "cmac",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "enc",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "picc_data",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RedirectResponse"
+                        }
+                    },
+                    "303": {
+                        "description": "See Other",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RedirectResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "description": "Upload video/image",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "upload"
+                ],
+                "summary": "Upload Video/Image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Files",
+                        "name": "files",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.UploadResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get User Details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get User Details",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update User Details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update User Details",
+                "parameters": [
+                    {
+                        "description": "Update User Details Request",
+                        "name": "update_user_details_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateUserDetailsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/org": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update User Org To Firebase and DB",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update User Org To Firebase and DB",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "new_org_tag_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "user_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web-page/{webpage_id}": {
+            "get": {
+                "description": "Get webPage by ID from DB",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webpage user"
+                ],
+                "summary": "Get Webpage By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Webpage ID",
+                        "name": "webpage_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/presenter.WebpageDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Author": {
+            "type": "object",
+            "properties": {
+                "artworks_count": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "$ref": "#/definitions/entity.Media"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "experience_year": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Firebase": {
+            "type": "object",
+            "properties": {
+                "identities": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "google.com": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "sign_in_provider": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Media": {
+            "type": "object",
+            "properties": {
+                "thumbnail_url": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Metadata": {
+            "type": "object",
+            "properties": {
+                "animation_url": {
+                    "type": "string"
+                },
+                "attributes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.MetadataAttribute"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "external_url": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.MetadataAttribute": {
+            "type": "object",
+            "properties": {
+                "display_type": {
+                    "type": "string"
+                },
+                "trait_type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Product": {
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "attribute": {},
+                "author_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/entity.Media"
+                },
+                "org_id": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "rating_score": {
+                    "type": "number"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "template_id": {
+                    "type": "string"
+                },
+                "three_dimension": {
+                    "$ref": "#/definitions/entity.Media"
+                },
+                "total_item": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                },
+                "video": {
+                    "$ref": "#/definitions/entity.Media"
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "firebase": {
+                    "$ref": "#/definitions/entity.Firebase"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "org_id": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.APIResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "result": {},
+                "x-request-id": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.RedirectResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.AllProductItemResponse": {
+            "type": "object",
+            "properties": {
+                "product_items_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.ProductItemDetailWithOwnerResponse"
+                    }
+                }
+            }
+        },
+        "presenter.AllWebpagesResponse": {
+            "type": "object",
+            "properties": {
+                "webpages_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.WebpageDetailResponse"
+                    }
+                }
+            }
+        },
+        "presenter.DigitalAssetResponse": {
+            "type": "object",
+            "properties": {
+                "chain": {
+                    "type": "string"
+                },
+                "chain_id": {
+                    "type": "integer"
+                },
+                "collection_id": {
+                    "type": "string"
+                },
+                "collection_name": {
+                    "type": "string"
+                },
+                "contract_address": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "metadata": {},
+                "owner_email": {
+                    "type": "string"
+                },
+                "owner_full_name": {
+                    "type": "string"
+                },
+                "standard": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "token_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.GalleryProductItemsListResponse": {
+            "type": "object",
+            "properties": {
+                "gallery_items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.GalleryProductItemsResponse"
+                    }
+                }
+            }
+        },
+        "presenter.GalleryProductItemsResponse": {
+            "type": "object",
+            "properties": {
+                "chain": {
+                    "type": "string"
+                },
+                "collection_id": {
+                    "type": "string"
+                },
+                "collection_name": {
+                    "type": "string"
+                },
+                "contract_address": {
+                    "type": "string"
+                },
+                "craftsmen": {
+                    "$ref": "#/definitions/presenter.StoryHomepageResponse"
+                },
+                "digital_asset_id": {
+                    "type": "string"
+                },
+                "digital_asset_status": {
+                    "type": "string"
+                },
+                "homepage": {
+                    "$ref": "#/definitions/presenter.StoryHomepageResponse"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.StoryTemplatePagesResponse"
+                    }
+                },
+                "product_detail": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_item_id": {
+                    "type": "string"
+                },
+                "standard": {
+                    "type": "string"
+                },
+                "tag_id": {
+                    "type": "string"
+                },
+                "token_id": {
+                    "type": "integer"
+                },
+                "total_like": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.GetAllMappingResponse": {
+            "type": "object",
+            "properties": {
+                "mapping": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.Mapping"
+                    }
+                }
+            }
+        },
+        "presenter.ListDigitalAssetsResponse": {
+            "type": "object",
+            "properties": {
+                "digital_assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.DigitalAssetResponse"
+                    }
+                }
+            }
+        },
+        "presenter.ListProductResponse": {
+            "type": "object",
+            "properties": {
+                "product_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.ProductResponse"
+                    }
+                }
+            }
+        },
+        "presenter.ListTemplateResponse": {
+            "type": "object",
+            "properties": {
+                "template_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TemplateResponse"
+                    }
+                }
+            }
+        },
+        "presenter.Mapping": {
+            "type": "object",
+            "properties": {
+                "claimable": {
+                    "type": "boolean"
+                },
+                "collection_id": {
+                    "type": "string"
+                },
+                "digital_asset_id": {
+                    "type": "string"
+                },
+                "digital_asset_status": {
+                    "type": "string"
+                },
+                "external_url": {
+                    "type": "string"
+                },
+                "org_id": {
+                    "type": "string"
+                },
+                "owner_email": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "string"
+                },
+                "owner_name": {
+                    "type": "string"
+                },
+                "product_item_id": {
+                    "type": "string"
+                },
+                "tag_id": {
+                    "type": "string"
+                },
+                "token_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.OrganizationDetailResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "org_logo_url": {
+                    "type": "string"
+                },
+                "org_name": {
+                    "type": "string"
+                },
+                "org_tag_name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.OrganizationListResponse": {
+            "type": "object",
+            "properties": {
+                "org_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.OrganizationResponse"
+                    }
+                }
+            }
+        },
+        "presenter.OrganizationResponse": {
+            "type": "object",
+            "properties": {
+                "org_id": {
+                    "type": "string"
+                },
+                "org_logo_url": {
+                    "type": "string"
+                },
+                "org_name": {
+                    "type": "string"
+                },
+                "org_tag_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.ProductItemDetailResponse": {
+            "type": "object",
+            "properties": {
+                "farm_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "item_index": {
+                    "type": "integer"
+                },
+                "owner_id": {
+                    "type": "string"
+                },
+                "process": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "rating_score": {
+                    "type": "number"
+                },
+                "total_like": {
+                    "type": "integer"
+                },
+                "varietal": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.ProductItemDetailWithOwnerResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "item_index": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "total_like": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.ProductResponse": {
+            "type": "object",
+            "properties": {
+                "organization": {
+                    "$ref": "#/definitions/presenter.OrganizationDetailResponse"
+                },
+                "product": {
+                    "$ref": "#/definitions/entity.Product"
+                }
+            }
+        },
+        "presenter.StoryDetailResponse": {
+            "type": "object",
+            "properties": {
+                "digital_asset_detail": {
+                    "$ref": "#/definitions/presenter.StoryDigitalAssetResponse"
+                },
+                "homepage_detail": {
+                    "$ref": "#/definitions/presenter.StoryHomepageResponse"
+                },
+                "mapping_detail": {
+                    "$ref": "#/definitions/presenter.StoryMappingResponse"
+                },
+                "organization_detail": {
+                    "$ref": "#/definitions/presenter.StoryOrganizationResponse"
+                },
+                "owner_detail": {
+                    "$ref": "#/definitions/presenter.StoryOwnerResponse"
+                },
+                "product_detail": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_item_detail": {
+                    "$ref": "#/definitions/presenter.StoryProductItemResponse"
+                },
+                "template_detail": {
+                    "$ref": "#/definitions/presenter.StoryTemplateResponse"
+                }
+            }
+        },
+        "presenter.StoryDigitalAssetResponse": {
+            "type": "object",
+            "properties": {
+                "chain": {
+                    "type": "string"
+                },
+                "collection_id": {
+                    "type": "string"
+                },
+                "collection_name": {
+                    "type": "string"
+                },
+                "contract_address": {
+                    "type": "string"
+                },
+                "digital_asset_id": {
+                    "type": "string"
+                },
+                "standard": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "token_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.StoryHomepageResponse": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryMappingResponse": {
+            "type": "object",
+            "properties": {
+                "claimable": {
+                    "type": "boolean"
+                },
+                "external_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryOrganizationResponse": {
+            "type": "object",
+            "properties": {
+                "org_id": {
+                    "type": "string"
+                },
+                "org_logo_url": {
+                    "type": "string"
+                },
+                "org_name": {
+                    "type": "string"
+                },
+                "org_tag_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryOwnerResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryProductItemResponse": {
+            "type": "object",
+            "properties": {
+                "item_index": {
+                    "type": "integer"
+                },
+                "product_item_id": {
+                    "type": "string"
+                },
+                "total_like": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.StoryTemplateMenuResponse": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "$ref": "#/definitions/presenter.StoryTemplateMenuTitleResponse"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryTemplateMenuTitleResponse": {
+            "type": "object",
+            "properties": {
+                "en": {
+                    "type": "string"
+                },
+                "vi": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryTemplatePagesResponse": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page_id": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.StoryTemplateResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.StoryTemplateMenuResponse"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.StoryTemplatePagesResponse"
+                    }
+                },
+                "template_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplateMenuResponse": {
+            "type": "object",
+            "properties": {
+                "page_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "$ref": "#/definitions/presenter.TemplateMenuTitleResponse"
+                }
+            }
+        },
+        "presenter.TemplateMenuTitleResponse": {
+            "type": "object",
+            "properties": {
+                "en": {
+                    "type": "string"
+                },
+                "vi": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplatePagesResponse": {
+            "type": "object",
+            "properties": {
+                "page_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplateResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TemplateMenuResponse"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TemplatePagesResponse"
+                    }
+                },
+                "template_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplateWebpagesMenuResponse": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "title": {
+                    "$ref": "#/definitions/presenter.TemplateMenuTitleResponse"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplateWebpagesPagesResponse": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TemplateWebpagesResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TemplateWebpagesMenuResponse"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TemplateWebpagesPagesResponse"
+                    }
+                },
+                "template_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.UploadResponse": {
+            "type": "object",
+            "properties": {
+                "image_paths": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "presenter.WebpageDetailResponse": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateTemplateRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.TemplateMenuRequest"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.TemplatePagesRequest"
+                    }
+                }
+            }
+        },
+        "request.CreateWebpageRequest": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.TemplateMenuRequest": {
+            "type": "object",
+            "properties": {
+                "page_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "$ref": "#/definitions/request.TemplateMenuTitleRequest"
+                }
+            }
+        },
+        "request.TemplateMenuTitleRequest": {
+            "type": "object",
+            "properties": {
+                "en": {
+                    "type": "string"
+                },
+                "vi": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.TemplatePagesRequest": {
+            "type": "object",
+            "properties": {
+                "page_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UnmapRequest": {
+            "type": "object",
+            "required": [
+                "product_item_id"
+            ],
+            "properties": {
+                "product_item_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateMappingRequest": {
+            "type": "object",
+            "properties": {
+                "claimable": {
+                    "type": "boolean"
+                },
+                "digital_asset_id": {
+                    "type": "string"
+                },
+                "external_url": {
+                    "type": "string"
+                },
+                "org_id": {
+                    "type": "string"
+                },
+                "product_item_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateTemplateRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.TemplateMenuRequest"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.TemplatePagesRequest"
+                    }
+                }
+            }
+        },
+        "request.UpdateUserDetailsRequest": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateWebpageRequest": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url_link": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "Description for what is this security definition being used",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

@@ -1,0 +1,87 @@
+basePath: /api/v1
+definitions:
+  backend-service_pkg_common_httpresp.Response:
+    properties:
+      data: {}
+      error_key:
+        example: error.system.internal
+        type: string
+      message:
+        example: Internal System Error
+        type: string
+      pagination:
+        $ref: '#/definitions/backend-service_pkg_common_pagination.Pagination'
+    type: object
+  backend-service_pkg_common_pagination.Pagination:
+    properties:
+      cursor:
+        type: string
+      limit:
+        default: 50
+        type: integer
+      next_cursor:
+        type: string
+      order_by:
+        type: string
+      order_direction:
+        default: desc
+        enum:
+        - asc
+        - desc
+        type: string
+      page:
+        default: 1
+        type: integer
+      total:
+        type: integer
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Example Admission  Backend API
+  version: "1.0"
+paths:
+  /user/products/{productId}:
+    get:
+      consumes:
+      - application/json
+      description: Get product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/backend-service_pkg_common_httpresp.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/backend-service_pkg_common_httpresp.Response'
+      summary: Get product by id
+      tags:
+      - product
+securityDefinitions:
+  ApiKeyAuth:
+    description: JWT Token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
