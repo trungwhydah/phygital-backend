@@ -24,6 +24,12 @@ compose-down: ## Down docker-compose
 	docker-compose down --remove-orphans
 .PHONY: compose-down
 
+copy-marketplace-env:
+	cp -f .env.marketplace .env
+
+copy-core-backend-env:
+	cp -f .env.core_backend .env
+
 swag-marketplace: ## swag init
 	swag init --parseDependency -g internal/marketplace/api/restful/v1/router.go \
 		--exclude internal/core_backend \
@@ -41,12 +47,14 @@ build: ## build binary file
     go build -tags migrate -o ./bin/app ./cmd/marketplace/app
 .PHONY: build
 
-run-marketplace: swag-marketplace ## swag then run
+run-marketplace: swag-marketplace \
+	copy-marketplace-env
 	go mod tidy && go mod download && \
 	go run -tags migrate ./cmd/marketplace
 .PHONY: run
 
-run-core-backend: swag-core-backend ## swag then run
+run-core-backend: swag-core-backend \
+	copy-core-backend-env
 	go mod tidy && go mod download && \
 	go run -tags migrate ./cmd/core_backend/main.go
 

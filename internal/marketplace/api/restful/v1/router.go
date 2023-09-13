@@ -30,7 +30,7 @@ type Router struct {
 	UserGroup   gin.IRoutes `name:"user-router"`
 }
 
-// @title          Example Admission  Backend API
+// @title          Matketplace Backend API
 // @version        1.0
 // @description    This is a sample server.
 // @termsOfService http://swagger.io/terms/
