@@ -31,7 +31,7 @@ copy-core-backend-env:
 	cp -f .env.core_backend .env
 
 swag-marketplace: ## swag init
-	swag init --parseDependency -g internal/marketplace/api/restful/v1/router.go \
+	swag init --parseDependency -g internal/marketplace/api/router.go \
 		--exclude internal/core_backend \
 		-o internal/marketplace/docs
 .PHONY: swag-marketplace

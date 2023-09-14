@@ -88,5 +88,5 @@ jobs:
         run: |
           CVPKG=$(go list ./... | grep -v mocks | tr '\n' ',')
           go install github.com/swaggo/swag/cmd/swag@latest
-          swag init --parseDependency -g internal/marketplace/api/restful/v1/router.go -o internal/marketplace/docs
+          swag init --parseDependency -g internal/marketplace/api/router.go -o internal/marketplace/docs
           go test -v -cover -coverprofile=coverage.out -covermode=atomic -race ./internal/...

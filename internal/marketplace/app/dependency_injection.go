@@ -5,9 +5,9 @@ import (
 	config "backend-service/config/marketplace"
 	cmdomain "backend-service/internal/common/domain"
 	cmrepo "backend-service/internal/common/repo"
-	"backend-service/internal/marketplace/api/restful"
-	"backend-service/internal/marketplace/api/restful/security"
-	v1 "backend-service/internal/marketplace/api/restful/v1"
+	"backend-service/internal/marketplace/api"
+	"backend-service/internal/marketplace/api/handler"
+	"backend-service/internal/marketplace/api/middleware"
 	"backend-service/internal/marketplace/domain"
 	"backend-service/internal/marketplace/repo"
 	"backend-service/pkg/common/logger"
@@ -30,13 +30,13 @@ var InternalOptions = fx.Options(
 	fx.Provide(NewServer),
 
 	// Router
-	fx.Provide(v1.NewRouter),
+	fx.Provide(api.NewRouter),
 
 	// Controller
-	restful.Module,
+	handler.Module,
 
-	// Security
-	security.Module,
+	// Middleware
+	middleware.Module,
 
 	// Use Case
 	domain.Module,

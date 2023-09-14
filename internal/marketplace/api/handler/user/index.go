@@ -1,7 +1,7 @@
 package user
 
 import (
-	"backend-service/internal/marketplace/api/restful/v1/user/product"
+	"backend-service/internal/marketplace/api/handler/user/product"
 	depinjection "backend-service/pkg/common/dep_injection"
 )
 

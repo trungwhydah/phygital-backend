@@ -15,6 +15,6 @@ COPY . .
 
 RUN go get github.com/githubnemo/CompileDaemon
 RUN go install github.com/githubnemo/CompileDaemon
-RUN swag init -g internal/marketplace/api/restful/v1/router.go -o internal/marketplace/docs
+RUN swag init -g internal/marketplace/api/router.go -o internal/marketplace/docs
 
 ENTRYPOINT CompileDaemon -build="go build -o /build/app ./cmd/marketplace" -command="/build/app"

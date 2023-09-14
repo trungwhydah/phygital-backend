@@ -1,12 +1,12 @@
 // Package v1 implements routing paths. Each services in own file.
-package v1
+package api
 
 import (
 	"net/http"
 
 	config "backend-service/config/marketplace"
-	"backend-service/internal/marketplace/api/restful/security"
-	"backend-service/internal/marketplace/api/restful/security/authen"
+	"backend-service/internal/marketplace/api/middleware"
+	"backend-service/internal/marketplace/api/middleware/authen"
 	"backend-service/internal/marketplace/docs"
 
 	"github.com/gin-gonic/gin"
@@ -75,7 +75,7 @@ func NewRouter(params RouteParams, config *config.Config) Router {
 	engine.GET("/healthz", func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	// configs cors
-	engine.Use(security.CorsConfigs())
+	engine.Use(middleware.CorsConfigs())
 
 	// public group
 	publicGroup := engine.Group("/api/v1")

@@ -1,7 +1,7 @@
-package security
+package middleware
 
 import (
-	"backend-service/internal/marketplace/api/restful/security/authen"
+	"backend-service/internal/marketplace/api/middleware/authen"
 
 	"go.uber.org/fx"
 )
