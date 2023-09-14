@@ -53,19 +53,22 @@ type AttributeAstronaut struct {
 }
 
 type AttributeSculpture struct {
-	ContactName       string         `bson:"contact_name" json:"contact_name"`
-	SculpturePedestal string         `bson:"sculpture_pedestal" json:"sculpture_pedestal"`
-	SculptureSize     string         `bson:"sculpture_size" json:"sculpture_size"`
-	SculptureWeight   string         `bson:"sculpture_weight" json:"sculpture_weight"`
-	SculptureTime     string         `bson:"sculpture_time" json:"sculpture_time"`
-	SculptureHeight   string         `bson:"sculpture_height" json:"sculpture_height"`
-	SculptureLength   string         `bson:"sculpture_length" json:"sculpture_length"`
-	SculptureWidth    string         `bson:"sculpture_width" json:"sculpture_width"`
-	Description       string         `bson:"description" json:"description"`
-	Village           Village        `bson:"village" json:"village"`
-	Craftsman         Craftsman      `bson:"craftsman" json:"craftsman"`
-	Stone             Stone          `bson:"stone" json:"stone"`
-	Translation       map[string]any `bson:"translation" json:"translation"`
+	ContactName           string `bson:"contact_name" json:"contact_name"`
+	SculptureRank         string `bson:"sculpture_rank" json:"sculpture_rank"`
+	SculpturePedestalSize string `bson:"sculpture_pedestal_size" json:"sculpture_pedestal_size"`
+	SculptureSize         string `bson:"sculpture_size" json:"sculpture_size"`
+	SculptureTime         string `bson:"sculpture_time" json:"sculpture_time"`
+	SculptureWeight       string `bson:"sculpture_weight" json:"sculpture_weight"`
+	// remove 3 lines below
+	SculptureHeight string `bson:"sculpture_height" json:"sculpture_height"`
+	SculptureLength string `bson:"sculpture_length" json:"sculpture_length"`
+	SculptureWidth  string `bson:"sculpture_width" json:"sculpture_width"`
+	//Description     string         `bson:"description" json:"description"`
+	Village     Village        `bson:"village" json:"village"`
+	Craftsman   Craftsman      `bson:"craftsman" json:"craftsman"`
+	Stone       Stone          `bson:"stone" json:"stone"`
+	Processes   []Process      `bson:"processes" json:"processes"`
+	Translation map[string]any `bson:"translation" json:"translation"`
 }
 
 type AttributeOrtho struct {
@@ -81,19 +84,29 @@ type Craftsman struct {
 	Description    string `bson:"description" json:"description"`
 }
 
+type Process struct {
+	ImageURL    string `bson:"image_url" json:"image_url"`
+	Description struct {
+		EN string `bson:"en" json:"en"`
+		VI string `bson:"vi" json:"vi"`
+	} `bson:"description" json:"description"`
+}
+
 type Stone struct {
-	Name       string `bson:"name" json:"name"`
-	Origin     string `bson:"origin" json:"origin"`
-	Clarity    string `bson:"clarity" json:"clarity"`
-	Rarity     string `bson:"rarity" json:"rarity"`
-	Properties string `bson:"properties" json:"properties"`
-	Image      Media  `bson:"image" json:"image"`
-	Color      string `bson:"color" json:"color"`
+	//Name       string `bson:"name" json:"name"`
+	Origin string `bson:"origin" json:"origin"`
+	//Clarity    string `bson:"clarity" json:"clarity"`
+	//Rarity     string `bson:"rarity" json:"rarity"`
+	//Properties string `bson:"properties" json:"properties"`
+	//Color      string `bson:"color" json:"color"`
+	Image       Media          `bson:"image" json:"image"`
+	Translation map[string]any `bson:"translation" json:"translation"`
 }
 
 type Village struct {
-	Name          string `bson:"name" json:"name"`
-	LocationVideo Media  `bson:"location_video" json:"location_video"`
+	Name          string         `bson:"name" json:"name"`
+	Translation   map[string]any `bson:"translation" json:"translation"`
+	LocationVideo Media          `bson:"location_video" json:"location_video"`
 }
 
 // ParseAttribute

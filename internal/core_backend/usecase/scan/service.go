@@ -1,14 +1,13 @@
 package scan
 
 import (
-	"encoding/json"
-	"net/http"
-
 	config "backend-service/config/core_backend"
 	"backend-service/internal/core_backend/api/handler/request"
 	"backend-service/internal/core_backend/common/logger"
 	"backend-service/internal/core_backend/entity"
 	"backend-service/internal/core_backend/infrastructure/callers"
+	"encoding/json"
+	"net/http"
 )
 
 // Service struct

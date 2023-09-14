@@ -26,4 +26,5 @@ type Usecase interface {
 	CheckExistedTemplate(*string) (bool, int, error)
 	GetAllTemplates() (*[]entity.Template, int, error)
 	GetTemplateWebpages(tID *string) (*entity.TemplateWebpages, int, error)
+	CloneTemplate(templateID *string) (*entity.Template, int, error)
 }

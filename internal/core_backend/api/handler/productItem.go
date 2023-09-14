@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"backend-service/internal/core_backend/usecase/author"
 	"errors"
 	"math/big"
 	"net/http"
 	"strconv"
+
+	"golang.org/x/sync/errgroup"
 
 	"backend-service/internal/core_backend/common"
 	"backend-service/internal/core_backend/entity"
@@ -57,10 +60,11 @@ type productItemHandler struct {
 	DigitalAssetService           digitalAsset.UseCase
 	DigitalAssetCollectionService digitalAssetCollection.UseCase
 	NFTService                    nft.UseCase
+	AuthorService                 author.UseCase
 }
 
 // NewItemHandler create handler
-func NewProductItemHandler(uuc user.UseCase, puc product.UseCase, piuc productItem.UseCase, dp presenter.ConvertProductItem, m mapping.UseCase, o organization.UseCase, t template.Usecase, w webpage.UseCase, v validation.CustomValidator, duc digitalAsset.UseCase, cuc digitalAssetCollection.UseCase, nft nft.UseCase) ProductItemHandler {
+func NewProductItemHandler(uuc user.UseCase, puc product.UseCase, piuc productItem.UseCase, dp presenter.ConvertProductItem, m mapping.UseCase, o organization.UseCase, t template.Usecase, w webpage.UseCase, v validation.CustomValidator, duc digitalAsset.UseCase, cuc digitalAssetCollection.UseCase, nft nft.UseCase, author author.UseCase) ProductItemHandler {
 	return &productItemHandler{
 		UserService:                   uuc,
 		ProductService:                puc,
@@ -74,6 +78,7 @@ func NewProductItemHandler(uuc user.UseCase, puc product.UseCase, piuc productIt
 		DigitalAssetService:           duc,
 		DigitalAssetCollectionService: cuc,
 		NFTService:                    nft,
+		AuthorService:                 author,
 	}
 }
 
@@ -94,11 +99,11 @@ func (h *productItemHandler) CreateProductItem(c *gin.Context) APIResponse {
 	// TODO: Will be check owner of the product and organzation ID
 	var req request.CreateProductItemRequest
 	if err := c.ShouldBind(&req); err != nil {
-		return CreateResponse(err, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(err, http.StatusBadRequest, "", err.Error(), nil)
 	}
 
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 
 	item, code, err := h.ProductItemService.CreateProductItem(&req)
@@ -135,11 +140,11 @@ func (h *productItemHandler) CreateMultipleProductItems(c *gin.Context) APIRespo
 	// TODO: Will be check owner of the product and organzation ID
 	var req request.CreateMultipleProductItemsRequest
 	if err := c.ShouldBind(&req); err != nil {
-		return CreateResponse(err, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(err, http.StatusBadRequest, "", err.Error(), nil)
 	}
 
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 	product, code, err := h.ProductService.GetProductByID(&req.ProductID)
 	if err != nil {
@@ -179,7 +184,7 @@ func (h *productItemHandler) GetDetailProductItem(c *gin.Context) APIResponse {
 	var req request.ProductItemInteractionRequest
 	req.ProductItemID = c.Param("product_item_id")
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 
 	item, code, err := h.ProductItemService.GetDetailProductItem(&req.ProductItemID)
@@ -377,7 +382,7 @@ func (h *productItemHandler) ClaimItem(c *gin.Context) APIResponse {
 	}
 
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 
 	user, code, err := h.UserService.TokenToUser(&req.Token)
@@ -432,6 +437,7 @@ func (h *productItemHandler) GetStoryByTagID(c *gin.Context) APIResponse {
 		template    *entity.TemplateWebpages
 		da          *entity.DigitalAsset
 		dac         *entity.DigitalAssetCollection
+		at          *entity.Author
 	)
 	if !mapping.ProductItemID.IsZero() {
 		productItemID := mapping.ProductItemID.Hex()
@@ -485,12 +491,20 @@ func (h *productItemHandler) GetStoryByTagID(c *gin.Context) APIResponse {
 		return CreateResponse(err, http.StatusInternalServerError, "", err.Error(), nil)
 	}
 
+	if !product.AuthorID.IsZero() {
+		aID := product.AuthorID.Hex()
+		at, code, err = h.AuthorService.GetAuthorDetail(&aID)
+		if err != nil {
+			return CreateResponse(err, http.StatusInternalServerError, "", err.Error(), nil)
+		}
+	}
+
 	orgID := mapping.OrganizationID.Hex()
 	organization, code, err := h.OrganizationService.GetDetailOrganization(&orgID)
 	if err != nil {
 		return CreateResponse(err, code, "", err.Error(), nil)
 	}
-	result := h.ProductItemPresenter.ResponseGetStoryDetail(mapping, product, productItem, owner, template, homepage, organization, da, dac)
+	result := h.ProductItemPresenter.ResponseGetStoryDetail(mapping, product, productItem, owner, template, homepage, organization, da, dac, at)
 
 	return HandlerResponse(http.StatusOK, "", "", result)
 }
@@ -511,7 +525,7 @@ func (h *productItemHandler) ToggleClaimableItem(c *gin.Context) APIResponse {
 	var req request.ProductItemInteractionRequest
 	req.ProductItemID = c.Param("product_item_id")
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 
 	success, code, err := h.ProductItemService.ToggleClaimable(&req)
@@ -539,7 +553,7 @@ func (h *productItemHandler) LikeProductItem(c *gin.Context) APIResponse {
 	req.ProductItemID = c.Param("product_item_id")
 
 	if e := h.Validator.Validate(req); e != nil {
-		return CreateResponse(e, http.StatusBadRequest, "", "", nil)
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
 	}
 
 	ok, code, err := h.ProductItemService.UpdateTotalLike(&req.ProductItemID)
@@ -585,6 +599,13 @@ func (h *productItemHandler) GetGalleryOfProductItemsInOrg(c *gin.Context) APIRe
 		dacs                  []entity.DigitalAssetCollection
 	)
 	for _, mapping := range *mappingsRaw {
+		// TODO
+		g := errgroup.Group{}
+		g.Go(func() error {
+
+			return nil
+		})
+		//End TODO
 		if mapping.ProductItemID.IsZero() {
 			continue
 		}

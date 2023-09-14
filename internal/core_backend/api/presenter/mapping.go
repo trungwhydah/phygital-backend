@@ -1,10 +1,9 @@
 package presenter
 
 import (
+	"backend-service/internal/core_backend/entity"
 	"sort"
 	"sync"
-
-	"backend-service/internal/core_backend/entity"
 )
 
 // MappingResponse data struct

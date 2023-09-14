@@ -1,12 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"net/http"
-	"time"
-
 	config "backend-service/config/core_backend"
 	"backend-service/internal/core_backend/api/handler/request"
 	"backend-service/internal/core_backend/api/presenter"
@@ -15,6 +9,11 @@ import (
 	validation "backend-service/internal/core_backend/infrastructure/validator"
 	"backend-service/internal/core_backend/usecase/organization"
 	"backend-service/internal/core_backend/usecase/user"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )

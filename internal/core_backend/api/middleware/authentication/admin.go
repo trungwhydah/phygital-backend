@@ -1,10 +1,9 @@
 package authentication
 
 import (
-	"strings"
-
 	"backend-service/internal/core_backend/entity"
 	"backend-service/internal/core_backend/infrastructure/firebase"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )

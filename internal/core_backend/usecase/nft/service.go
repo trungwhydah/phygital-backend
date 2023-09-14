@@ -1,6 +1,11 @@
 package nft
 
 import (
+	config "backend-service/config/core_backend"
+	constant "backend-service/internal/core_backend/common"
+	"backend-service/internal/core_backend/common/logger"
+	"backend-service/internal/core_backend/contracts"
+	"backend-service/internal/core_backend/contracts/astronaut_nft"
 	"context"
 	"crypto/ecdsa"
 	"errors"
@@ -10,12 +15,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
-	config "backend-service/config/core_backend"
-	constant "backend-service/internal/core_backend/common"
-	"backend-service/internal/core_backend/common/logger"
-	"backend-service/internal/core_backend/contracts"
-	"backend-service/internal/core_backend/contracts/astronaut_nft"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"

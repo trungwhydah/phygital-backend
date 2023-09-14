@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"backend-service/internal/core_backend/config"
+	config "backend-service/config/core_backend"
 	"backend-service/internal/core_backend/entity"
 
 	"go.mongodb.org/mongo-driver/bson"

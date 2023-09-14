@@ -25,5 +25,5 @@ func (i *interactor) NewProductItemPresenter() presenter.ConvertProductItem {
 
 // NewItemHandler
 func (i *interactor) NewProductItemHandler() handler.ProductItemHandler {
-	return handler.NewProductItemHandler(i.NewUserService(), i.NewProductService(), i.NewProductItemService(), i.NewProductItemPresenter(), i.NewMappingService(), i.NewOrganizationService(), i.NewTemplateService(), i.NewWebPageService(), i.NewCustomValidator(), i.NewDigitalAssetService(), i.NewDigitalAssetCollectionService(), i.NewNFTService())
+	return handler.NewProductItemHandler(i.NewUserService(), i.NewProductService(), i.NewProductItemService(), i.NewProductItemPresenter(), i.NewMappingService(), i.NewOrganizationService(), i.NewTemplateService(), i.NewWebPageService(), i.NewCustomValidator(), i.NewDigitalAssetService(), i.NewDigitalAssetCollectionService(), i.NewNFTService(), i.NewAuthorService())
 }

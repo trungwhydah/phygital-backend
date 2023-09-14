@@ -9,6 +9,7 @@ type Author interface {
 	CreateAuthor(author *entity.Author) (*entity.Author, error)
 	GetListAuthor() (*[]entity.Author, error)
 	GetAuthorByID(authorID *string) (*entity.Author, error)
+	UpdateAuthor(author *entity.Author) (*entity.Author, error)
 }
 
 // Repository interface
@@ -21,4 +22,5 @@ type UseCase interface {
 	CreateAuthor(author *entity.Author) (*entity.Author, int, error)
 	GetListAuthor() (*[]entity.Author, int, error)
 	GetAuthorDetail(authorID *string) (*entity.Author, int, error)
+	UpdateAuthor(authorID *string, author *entity.Author) (*entity.Author, int, error)
 }

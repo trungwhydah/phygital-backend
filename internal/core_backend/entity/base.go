@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"backend-service/internal/core_backend/common/logger"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -22,6 +23,25 @@ func (bm *BaseModel) SetTime() *BaseModel {
 	return bm
 }
 
+func (bm *BaseModel) SetID(ID *string) *BaseModel {
+	objectID, err := primitive.ObjectIDFromHex(*ID)
+	if err != nil {
+		logger.LogError(err.Error())
+		return bm
+	}
+
+	bm.ID = objectID
+	return bm
+}
+
+func (bm *BaseModel) Renew() *BaseModel {
+	bm.ID = primitive.NilObjectID
+	bm.CreatedAt = time.Now()
+	bm.UpdatedAt = time.Now()
+
+	return bm
+}
+
 func (bm *BaseModel) SetStatus(status string) *BaseModel {
 	bm.Status = status
 	return bm
@@ -37,4 +57,9 @@ type Media struct {
 	URL          string `bson:"url" json:"url"`
 	Type         string `bson:"type" json:"type"`
 	ThumbnailURL string `bson:"thumbnail_url" json:"thumbnail_url"`
+}
+
+type MultipleLanguages struct {
+	EN string `bson:"en" json:"en"`
+	VI string `bson:"vi" json:"vi"`
 }

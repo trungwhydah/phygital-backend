@@ -11,7 +11,7 @@ type WebPage struct {
 	Attributes  map[string]interface{} `bson:"attributes"`
 }
 
-// Collection name of Chip
+// CollectionName of WebPage
 func (WebPage) CollectionName() string {
 	return "webpages"
 }

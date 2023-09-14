@@ -1,11 +1,10 @@
 package template
 
 import (
-	"net/http"
-
 	"backend-service/internal/core_backend/api/handler/request"
 	"backend-service/internal/core_backend/common/logger"
 	"backend-service/internal/core_backend/entity"
+	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -145,4 +144,22 @@ func (s *Service) GetTemplateWebpages(tID *string) (*entity.TemplateWebpages, in
 		return nil, http.StatusInternalServerError, err
 	}
 	return templateWebpages, http.StatusOK, nil
+}
+
+// CloneTemplate - Clone a template with given template ID
+func (s *Service) CloneTemplate(templateID *string) (*entity.Template, int, error) {
+	template, err := s.repo.GetTemplate(templateID)
+	if err != nil {
+		logger.LogError("Error getting template: " + err.Error())
+		return nil, http.StatusInternalServerError, err
+	}
+	template.Renew()
+	template.Name += "_Copy"
+
+	templateInserted, err := s.repo.CreateTemplate(template)
+	if err != nil {
+		logger.LogError("Error creating template: " + err.Error())
+		return nil, http.StatusInternalServerError, err
+	}
+	return templateInserted, http.StatusOK, nil
 }

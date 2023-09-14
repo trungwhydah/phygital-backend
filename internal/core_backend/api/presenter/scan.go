@@ -1,9 +1,8 @@
 package presenter
 
 import (
-	"fmt"
-
 	config "backend-service/config/core_backend"
+	"fmt"
 )
 
 // ScanResponse data struct

@@ -6,9 +6,9 @@ definitions:
         type: string
       avatar:
         $ref: '#/definitions/entity.Media'
-      created_at:
+      contact_name:
         type: string
-      description:
+      created_at:
         type: string
       email:
         type: string
@@ -17,15 +17,20 @@ definitions:
       id:
         type: string
       name:
-        type: string
+        $ref: '#/definitions/entity.MultipleLanguages'
       phone:
         type: string
       status:
         type: string
+      translation:
+        additionalProperties: {}
+        type: object
       type:
         type: string
       updated_at:
         type: string
+    required:
+    - name
     type: object
   entity.Firebase:
     properties:
@@ -76,6 +81,13 @@ definitions:
       trait_type:
         type: string
       value:
+        type: string
+    type: object
+  entity.MultipleLanguages:
+    properties:
+      en:
+        type: string
+      vi:
         type: string
     type: object
   entity.Product:
@@ -401,6 +413,8 @@ definitions:
     type: object
   presenter.StoryDetailResponse:
     properties:
+      author:
+        $ref: '#/definitions/entity.Author'
       digital_asset_detail:
         $ref: '#/definitions/presenter.StoryDigitalAssetResponse'
       homepage_detail:
@@ -705,6 +719,11 @@ definitions:
       url_link:
         type: string
     type: object
+  request.InteractProductDetailRequest:
+    properties:
+      product_id:
+        type: string
+    type: object
   request.TemplateMenuRequest:
     properties:
       page_id:
@@ -814,14 +833,15 @@ paths:
                 result:
                   type: boolean
               type: object
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.APIResponse'
       security:
       - ApiKeyAuth: []
       summary: Get List of Author
-  /admin/author/create:
+      tags:
+      - author
     post:
       consumes:
       - application/json
@@ -845,13 +865,53 @@ paths:
                 result:
                   type: boolean
               type: object
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.APIResponse'
       security:
       - ApiKeyAuth: []
       summary: Create Author
+      tags:
+      - author
+  /admin/author/{author_id}:
+    put:
+      consumes:
+      - application/json
+      description: Update author
+      parameters:
+      - description: Author ID
+        in: path
+        name: author_id
+        required: true
+        type: string
+      - description: Update an author
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Author'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.Author'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Author
+      tags:
+      - author
   /admin/digital-asset:
     get:
       description: Get All Digital Assets Or By Org Tag Name
@@ -1506,6 +1566,43 @@ paths:
       summary: Update Product Detail
       tags:
       - product
+  /admin/product/clone:
+    post:
+      consumes:
+      - application/json
+      description: Clone product
+      parameters:
+      - description: Clone Product
+        in: body
+        name: product_id
+        required: true
+        schema:
+          $ref: '#/definitions/request.InteractProductDetailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.APIResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.APIResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Clone Product
+      tags:
+      - product
   /admin/product/create:
     post:
       consumes:
@@ -1908,9 +2005,15 @@ paths:
       summary: Create Webpage
       tags:
       - webpage
-  /author/:author_id:
+  /author/{author_id}:
     get:
       description: Get Author information
+      parameters:
+      - description: Author ID
+        in: path
+        name: author_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1923,13 +2026,15 @@ paths:
                 result:
                   type: boolean
               type: object
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.APIResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Author information
+      tags:
+      - author
   /competition/{org_tag_name}:
     get:
       description: Get Gallery Of Product Items Of A Competition

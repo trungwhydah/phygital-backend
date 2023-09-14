@@ -1,14 +1,11 @@
 package handler
 
 import (
+	config "backend-service/config/core_backend"
+	validation "backend-service/internal/core_backend/infrastructure/validator"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
-
-	config "backend-service/config/core_backend"
-	"backend-service/internal/core_backend/common/logger"
-	validation "backend-service/internal/core_backend/infrastructure/validator"
 
 	"github.com/gin-gonic/gin"
 
@@ -79,30 +76,25 @@ func (h *scanHandler) DecodeScan(c *gin.Context) RedirectResponse {
 	errorPageURL := fmt.Sprintf("%s/%s", config.C.Domains.WebpageDomain, config.C.Domains.ScanErrorPage)
 	var request request.ScanRequest
 	if err := c.ShouldBind(&request); err != nil {
-		log.Println("[DEBUG] - 1 - Error: Binding Request: ", err.Error())
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	if e := h.Validator.Validate(request); e != nil {
-		log.Println("[DEBUG] - 2 - Error: Validate Request: ", e.Error())
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	scanInfo, _, err := h.ScanService.ProcessScan(&request)
 	if err != nil {
-		log.Println("[DEBUG] - 20 - ProcessScan")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	tag, _, err := h.TagService.GetTagByHWID(&scanInfo.UID)
 	if err != nil || tag == nil {
-		log.Println("[DEBUG] - 21 - GetTagByHWID")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 	// Verification section
 	verification, _, err := h.VerificationService.Verify(scanInfo, tag)
 	if err != nil {
-		log.Println("[DEBUG] - 22 - Verify")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
@@ -115,22 +107,18 @@ func (h *scanHandler) DecodeScan(c *gin.Context) RedirectResponse {
 			return RedirectResponse{StatusCode: http.StatusSeeOther, URL: "https://ortho.fashion/non-genuine"}
 		}
 
-		log.Println("[DEBUG] - 23 - !verification.IsValid")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 	h.TagService.UpdateTagCounter(&tag.TagID, &verification.Nonce)
 
 	mapping, _, err := h.MappingService.GetMappingWithTagID(&tag.TagID)
 	if err != nil || mapping == nil {
-
-		log.Println("[DEBUG] - 24 - GetMappingWithTagID")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	if len(mapping.ExternalURL) != 0 {
 		session, _, err := h.SessionService.CreateSession(&tag.TagID, config.C.Server.SessionTimeoutInSecond)
 		if err != nil {
-			log.Println("[DEBUG] - 25 - CreateSession")
 			return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 		}
 
@@ -138,29 +126,24 @@ func (h *scanHandler) DecodeScan(c *gin.Context) RedirectResponse {
 	}
 
 	if mapping.ProductItemID.IsZero() {
-		log.Println("[DEBUG] - 10 - Empty Product Item")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	piID := mapping.ProductItemID.Hex()
 	item, _, err := h.ProductItemService.GetDetailProductItem(&piID)
 	if err != nil || item == nil || item.ProductID.IsZero() {
-		log.Println("[DEBUG] - 26 - GetDetailProductItem")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	pID := item.ProductID.Hex()
 	product, _, err := h.ProductService.GetProductByID(&pID)
 	if err != nil || product.TemplateID.IsZero() {
-		log.Println("[DEBUG] - 13 - Empty Product")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
 	tID := product.TemplateID.Hex()
 	template, _, err := h.TemplateService.GetTemplate(&tID)
 	if err != nil {
-
-		log.Println("[DEBUG] - 27 - GetTemplate")
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 
@@ -171,7 +154,6 @@ func (h *scanHandler) DecodeScan(c *gin.Context) RedirectResponse {
 	oID := mapping.OrganizationID.Hex()
 	org, _, err := h.OrganizationService.GetDetailOrganization(&oID)
 	if err != nil {
-		logger.LogError("[DEBUG] - 16 - Get error when verifying: " + err.Error())
 		return RedirectResponse{StatusCode: http.StatusSeeOther, URL: errorPageURL}
 	}
 

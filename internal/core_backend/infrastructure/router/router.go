@@ -128,6 +128,10 @@ func Initialize(handler handler.AppHandler, mdw middleware.MidddlewareServices) 
 				result := handler.ProductHandler.CreateProduct(c)
 				c.JSON(result.Code, result)
 			})
+			productGroup.POST("/clone", func(c *gin.Context) {
+				result := handler.ProductHandler.CloneProductByID(c)
+				c.JSON(result.Code, result)
+			})
 			productGroup.GET("/:product_id", func(c *gin.Context) {
 				result := handler.ProductHandler.GetProductDetail(c)
 				c.JSON(result.Code, result)
@@ -209,30 +213,31 @@ func Initialize(handler handler.AppHandler, mdw middleware.MidddlewareServices) 
 				c.JSON(result.Code, result)
 			})
 		}
+
 		templateGroup := adminGroup.Group("template")
 		{
 			templateGroup.GET("/:template_id", func(c *gin.Context) {
 				result := handler.TemplateHandler.GetTemplate(c)
-				c.JSON(http.StatusOK, result)
+				c.JSON(result.Code, result)
 			})
 			templateGroup.PUT("/:template_id", func(c *gin.Context) {
 				result := handler.TemplateHandler.UpdateTemplate(c)
-				c.JSON(http.StatusOK, result)
+				c.JSON(result.Code, result)
 			})
 			templateGroup.GET("/all", func(c *gin.Context) {
 				result := handler.TemplateHandler.GetAllTemplates(c)
-				c.JSON(http.StatusOK, result)
+				c.JSON(result.Code, result)
 			})
 			templateGroup.POST("/create", func(c *gin.Context) {
 				result := handler.TemplateHandler.CreateTemplate(c)
-				c.JSON(http.StatusOK, result)
+				c.JSON(result.Code, result)
 			})
 		}
 		pageGroup := adminGroup.Group("web-page")
 		{
 			pageGroup.GET("/all", func(c *gin.Context) {
 				result := handler.WebPageHandler.GetAllWebPages(c)
-				c.JSON(200, result)
+				c.JSON(result.Code, result)
 			})
 			pageGroup.POST("/create", func(c *gin.Context) {
 				result := handler.WebPageHandler.CreateWebPage(c)
@@ -244,7 +249,7 @@ func Initialize(handler handler.AppHandler, mdw middleware.MidddlewareServices) 
 			})
 			pageGroup.DELETE("/:webpage_id", func(c *gin.Context) {
 				result := handler.WebPageHandler.DeleteWebPage(c)
-				c.JSON(http.StatusOK, result)
+				c.JSON(result.Code, result)
 			})
 		}
 		tagManagementGroup := adminGroup.Group("/tag")
@@ -290,6 +295,10 @@ func Initialize(handler handler.AppHandler, mdw middleware.MidddlewareServices) 
 			})
 			authorGroup.POST("", func(c *gin.Context) {
 				result := handler.AuthorHandler.CreateAuthor(c)
+				c.JSON(result.Code, result.Result)
+			})
+			authorGroup.PUT("/:author_id", func(c *gin.Context) {
+				result := handler.AuthorHandler.UpdateAuthor(c)
 				c.JSON(result.Code, result.Result)
 			})
 		}

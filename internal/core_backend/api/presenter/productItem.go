@@ -1,10 +1,9 @@
 package presenter
 
 import (
+	"backend-service/internal/core_backend/entity"
 	"math/big"
 	"sort"
-
-	"backend-service/internal/core_backend/entity"
 )
 
 // ProductItemResponse data struct
@@ -44,13 +43,14 @@ type AllProductItemResponse struct {
 
 type StoryDetailResponse struct {
 	MappingDetail      StoryMappingResponse      `json:"mapping_detail"`
-	ProductDetail      entity.Product            `json:"product_detail"`
+	ProductDetail      *entity.Product           `json:"product_detail"`
 	ProductItemDetail  StoryProductItemResponse  `json:"product_item_detail"`
 	OwnerDetail        StoryOwnerResponse        `json:"owner_detail"`
 	TemplateDetail     StoryTemplateResponse     `json:"template_detail"`
 	OrganizationDetail StoryOrganizationResponse `json:"organization_detail"`
 	DigitalAssetDetail StoryDigitalAssetResponse `json:"digital_asset_detail"`
 	HomepageDetail     StoryHomepageResponse     `json:"homepage_detail"`
+	AuthorDetail       *entity.Author            `json:"author"`
 }
 
 type StoryMappingResponse struct {
@@ -187,7 +187,7 @@ type ConvertProductItem interface {
 	ResponseProductItemDetail(productItem *entity.ProductItem, product *entity.Product) *ProductItemDetailResponse
 	ResponseGetAllProductItemsOfProduct(productItems *[]entity.ProductItem, user *[]entity.User, productName *string) *AllProductItemResponse
 	ResponseGetAllProductItemsInOrg(productItems *[]entity.ProductItem, user *[]entity.User, products *[]entity.Product) *AllProductItemResponse
-	ResponseGetStoryDetail(mapping *entity.Mapping, product *entity.Product, productItem *entity.ProductItem, owner *entity.User, template *entity.TemplateWebpages, homepage *entity.WebPage, organization *entity.Organization, da *entity.DigitalAsset, dac *entity.DigitalAssetCollection) *StoryDetailResponse
+	ResponseGetStoryDetail(mapping *entity.Mapping, product *entity.Product, productItem *entity.ProductItem, owner *entity.User, template *entity.TemplateWebpages, homepage *entity.WebPage, organization *entity.Organization, da *entity.DigitalAsset, dac *entity.DigitalAssetCollection, author *entity.Author) *StoryDetailResponse
 	ResponseGalleryProductItems(*string, []int, *[]entity.Mapping, *[]entity.Product, *[]entity.WebPage, *[]entity.WebPage, *[]entity.TemplateWebpages, *[]entity.DigitalAsset, *[]entity.DigitalAssetCollection) *GalleryProductItemsListResponse
 	ResponseGalleryProductItemsV2(mappings *[]*entity.Mapping, products *[]*entity.Product, productItems *[]*entity.ProductItem, owners *[]*entity.User, templates *[]*entity.TemplateWebpages, organizations *[]*entity.Organization, das *[]*entity.DigitalAsset, dacs *[]*entity.DigitalAssetCollection) *GalleryProductItemsListResponseV2
 	ResponseGetMetadata(*big.Int) *ProductItemMetadataResponse
@@ -314,18 +314,17 @@ func (pp *PresenterProductItem) ResponseGetAllProductItemsInOrg(productItems *[]
 	return &response
 }
 
-func (pp *PresenterProductItem) ResponseGetStoryDetail(mapping *entity.Mapping, product *entity.Product, productItem *entity.ProductItem, owner *entity.User, template *entity.TemplateWebpages, homepage *entity.WebPage, organization *entity.Organization, da *entity.DigitalAsset, dac *entity.DigitalAssetCollection) *StoryDetailResponse {
-	response := &StoryDetailResponse{}
+func (pp *PresenterProductItem) ResponseGetStoryDetail(mapping *entity.Mapping, product *entity.Product, productItem *entity.ProductItem, owner *entity.User, template *entity.TemplateWebpages, homepage *entity.WebPage, organization *entity.Organization, da *entity.DigitalAsset, dac *entity.DigitalAssetCollection, author *entity.Author) *StoryDetailResponse {
+	response := &StoryDetailResponse{
+		AuthorDetail:  author,
+		ProductDetail: product,
+	}
 
 	if mapping != nil {
 		response.MappingDetail = StoryMappingResponse{
 			ExternalURL: mapping.ExternalURL,
 			Claimable:   mapping.Claimable,
 		}
-	}
-
-	if product != nil {
-		response.ProductDetail = *product
 	}
 
 	if productItem != nil {
@@ -466,16 +465,14 @@ func (pp *PresenterProductItem) ResponseGalleryProductItemsV2(mappings *[]*entit
 		organization := (*organizations)[i]
 		da := (*das)[i]
 		dac := (*dacs)[i]
-		info := StoryDetailResponse{}
+		info := StoryDetailResponse{
+			ProductDetail: product,
+		}
 		if mapping != nil {
 			info.MappingDetail = StoryMappingResponse{
 				ExternalURL: mapping.ExternalURL,
 				Claimable:   mapping.Claimable,
 			}
-		}
-
-		if product != nil {
-			info.ProductDetail = *product
 		}
 
 		if productItem != nil {

@@ -1,10 +1,10 @@
 package presenter
 
 import (
+	"backend-service/internal/core_backend/entity"
+	"fmt"
 	"strconv"
 	"strings"
-
-	"backend-service/internal/core_backend/entity"
 )
 
 // DigitalAssetResponse data struct
@@ -139,9 +139,11 @@ func (pp *PresenterDigitalAsset) ResponseGetMetadata(itemIndex int, org *entity.
 			TraitType: "Cuộc Thi",
 			Value:     "Đá Non Nước 2023",
 		})
+		stoneTarget := attribute.Stone.Translation
+		materialName := (stoneTarget["vi"].(map[string]string))["name"]
 		metadata.Attributes = append(metadata.Attributes, MetadataAttribute{
 			TraitType: "Chất Liệu",
-			Value:     attribute.Stone.Name,
+			Value:     fmt.Sprintf("%v", materialName),
 		})
 		metadata.Attributes = append(metadata.Attributes, MetadataAttribute{
 			TraitType: "Chiều Dài",
@@ -155,7 +157,9 @@ func (pp *PresenterDigitalAsset) ResponseGetMetadata(itemIndex int, org *entity.
 			TraitType: "Chiều Cao",
 			Value:     attribute.SculptureHeight,
 		})
-		metadata.Description = attribute.Description
+		// TODO - Remove HTML tag
+		viDescription := attribute.Translation["vi"].(map[string]string)["description"]
+		metadata.Description = fmt.Sprintf("%v", viDescription)
 		metadata.AnimationURL = product.ThreeDimension.URL
 	case "astronaut":
 		metadata.Name = product.ProductName

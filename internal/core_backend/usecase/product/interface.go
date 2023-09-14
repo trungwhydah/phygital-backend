@@ -37,4 +37,5 @@ type UseCase interface {
 	GetProductByID(*string) (*entity.Product, int, error)
 	SyncTotalItems(*string, int) (bool, int, error)
 	GetProductForAuthor(*string) (*[]entity.Product, int, error)
+	CloneProductByID(*string) (*entity.Product, int, error)
 }

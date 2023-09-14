@@ -35,6 +35,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "author"
+                ],
                 "summary": "Get List of Author",
                 "responses": {
                     "200": {
@@ -55,16 +58,14 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handler.APIResponse"
                         }
                     }
                 }
-            }
-        },
-        "/admin/author/create": {
+            },
             "post": {
                 "security": [
                     {
@@ -77,6 +78,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "author"
                 ],
                 "summary": "Create Author",
                 "parameters": [
@@ -109,8 +113,72 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/author/{author_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update author",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "author"
+                ],
+                "summary": "Update Author",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Author ID",
+                        "name": "author_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update an author",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Author"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.Author"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handler.APIResponse"
                         }
@@ -1046,6 +1114,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/product/clone": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Clone product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Clone Product",
+                "parameters": [
+                    {
+                        "description": "Clone Product",
+                        "name": "product_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.InteractProductDetailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/entity.Product"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/create": {
             "post": {
                 "security": [
@@ -1919,7 +2050,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/author/:author_id": {
+        "/author/{author_id}": {
             "get": {
                 "security": [
                     {
@@ -1930,7 +2061,19 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "author"
+                ],
                 "summary": "Get Author information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Author ID",
+                        "name": "author_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1950,8 +2093,8 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handler.APIResponse"
                         }
@@ -2852,6 +2995,9 @@ const docTemplate = `{
     "definitions": {
         "entity.Author": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "artworks_count": {
                     "type": "string"
@@ -2859,10 +3005,10 @@ const docTemplate = `{
                 "avatar": {
                     "$ref": "#/definitions/entity.Media"
                 },
-                "created_at": {
+                "contact_name": {
                     "type": "string"
                 },
-                "description": {
+                "created_at": {
                     "type": "string"
                 },
                 "email": {
@@ -2875,13 +3021,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/entity.MultipleLanguages"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "status": {
                     "type": "string"
+                },
+                "translation": {
+                    "type": "object",
+                    "additionalProperties": {}
                 },
                 "type": {
                     "type": "string"
@@ -2966,6 +3116,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.MultipleLanguages": {
+            "type": "object",
+            "properties": {
+                "en": {
+                    "type": "string"
+                },
+                "vi": {
                     "type": "string"
                 }
             }
@@ -3463,6 +3624,9 @@ const docTemplate = `{
         "presenter.StoryDetailResponse": {
             "type": "object",
             "properties": {
+                "author": {
+                    "$ref": "#/definitions/entity.Author"
+                },
                 "digital_asset_detail": {
                     "$ref": "#/definitions/presenter.StoryDigitalAssetResponse"
                 },
@@ -3923,6 +4087,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "url_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.InteractProductDetailRequest": {
+            "type": "object",
+            "properties": {
+                "product_id": {
                     "type": "string"
                 }
             }

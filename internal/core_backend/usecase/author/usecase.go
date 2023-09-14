@@ -56,3 +56,14 @@ func (s *Service) GetAuthorDetail(authorID *string) (*entity.Author, int, error)
 
 	return author, http.StatusOK, nil
 }
+
+// UpdateAuthor -
+func (s *Service) UpdateAuthor(authorID *string, author *entity.Author) (*entity.Author, int, error) {
+	author.SetTime().SetID(authorID)
+	insertedAuthor, err := s.repo.UpdateAuthor(author)
+	if err != nil {
+		return nil, http.StatusInternalServerError, err
+	}
+
+	return insertedAuthor, http.StatusOK, nil
+}

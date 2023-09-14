@@ -1,13 +1,12 @@
 package connections
 
 import (
+	config "backend-service/config/core_backend"
+	"backend-service/internal/core_backend/common/logger"
 	"context"
 	"fmt"
 	"log"
 	"time"
-
-	config "backend-service/config/core_backend"
-	"backend-service/internal/core_backend/common/logger"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

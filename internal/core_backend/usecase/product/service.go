@@ -1,6 +1,7 @@
 package product
 
 import (
+	"log"
 	"net/http"
 
 	"backend-service/internal/core_backend/api/handler/request"
@@ -76,6 +77,7 @@ func (s *Service) UpdateProductDetail(request *entity.Product, productID *string
 		logger.LogError("Got error while getting product detail: " + err.Error())
 		return false, http.StatusInternalServerError, err
 	}
+	log.Println(request)
 	request.BaseModel = prod.BaseModel
 	request.SetTime()
 	request.ClearModel()
@@ -126,4 +128,25 @@ func (s *Service) GetProductForAuthor(authorID *string) (*[]entity.Product, int,
 	}
 
 	return listProducts, http.StatusOK, nil
+}
+
+// CloneProductByID - clone product with specified product ID
+func (s *Service) CloneProductByID(productID *string) (*entity.Product, int, error) {
+	targetProduct, err := s.repo.GetProductByID(productID)
+	if err != nil {
+		logger.LogError("Error getting product: " + err.Error())
+		return nil, http.StatusInternalServerError, err
+	}
+
+	targetProduct.ProductName += "_Copy"
+	targetProduct.TotalItem = 0
+	targetProduct.Renew()
+
+	newProduct, err := s.repo.CreateProduct(targetProduct)
+	if err != nil {
+		logger.LogError("Get error when creating product: " + err.Error())
+		return nil, http.StatusInternalServerError, err
+	}
+
+	return newProduct, http.StatusOK, nil
 }

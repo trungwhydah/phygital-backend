@@ -1,9 +1,8 @@
 package presenter
 
 import (
-	"time"
-
 	"backend-service/internal/core_backend/entity"
+	"time"
 )
 
 // DummyResponse data struct

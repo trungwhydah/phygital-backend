@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+
 	"go.mongodb.org/mongo-driver/bson"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -65,4 +66,26 @@ func (r *AuthorRepository) GetAuthorByID(authorID *string) (*entity.Author, erro
 	}
 
 	return &author, nil
+}
+
+// UpdateAuthor -
+func (r *AuthorRepository) UpdateAuthor(author *entity.Author) (*entity.Author, error) {
+	ctx := context.Background()
+	err := r.dbMongo.Collection(author.CollectionName()).FindOneAndDelete(
+		ctx,
+		bson.D{{Key: "_id", Value: author.ID}},
+	).Err()
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = r.dbMongo.Collection(author.CollectionName()).InsertOne(
+		ctx,
+		author,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return author, nil
 }

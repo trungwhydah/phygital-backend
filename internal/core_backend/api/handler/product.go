@@ -28,6 +28,7 @@ type ProductHandler interface {
 	UpdateProductDetail(c *gin.Context) APIResponse
 	DeteleProductByID(c *gin.Context) APIResponse
 	GetProductByTagID(c *gin.Context) APIResponse
+	CloneProductByID(c *gin.Context) APIResponse
 }
 
 // productHandler struct
@@ -404,4 +405,36 @@ func (h *productHandler) GetProductByTagID(c *gin.Context) APIResponse {
 	}
 
 	return HandlerResponse(http.StatusOK, "", "", product)
+}
+
+// CloneProductByID	godoc
+// CloneProductByID	API
+//
+//	@Summary		Clone Product
+//	@Description	Clone product
+//	@Tags			product
+//	@Accept			json
+//	@Security		ApiKeyAuth
+//	@Produce		json
+//	@Router			/admin/product/clone [post]
+//	@Param			product_id	body		request.InteractProductDetailRequest	true	"Clone Product"
+//	@Success		200						{object}	APIResponse{result=entity.Product}
+//	@Failure		400						{object}	APIResponse
+//	@Failure		500						{object}	APIResponse
+func (h *productHandler) CloneProductByID(c *gin.Context) APIResponse {
+	var req request.InteractProductDetailRequest
+	if err := c.ShouldBind(&req); err != nil {
+		return CreateResponse(err, http.StatusBadRequest, "", err.Error(), nil)
+	}
+
+	if e := h.Validator.Validate(&req); e != nil {
+		return CreateResponse(e, http.StatusBadRequest, "", e.Error(), nil)
+	}
+
+	prod, code, err := h.ProductService.CloneProductByID(&req.ProductID)
+	if err != nil {
+		return CreateResponse(err, code, "", err.Error(), nil)
+	}
+
+	return HandlerResponse(http.StatusOK, "", "", prod)
 }

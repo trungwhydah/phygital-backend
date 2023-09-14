@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log"
 
 	"backend-service/internal/core_backend/common"
 	"backend-service/internal/core_backend/entity"
@@ -104,12 +105,12 @@ func (r *ProductRepository) GetProductByID(productID *string) (*entity.Product, 
 
 // UpdateProductDetail
 func (r *ProductRepository) UpdateProductDetail(product *entity.Product, productID *string) (bool, error) {
+	log.Println(product)
 	pID, err := primitive.ObjectIDFromHex(*productID)
 	if err != nil {
 		return false, err
 	}
 
-	// log.Fatalln(product)
 	var newProduct entity.Product
 	err = r.dbMongo.Collection(product.CollectionName()).FindOneAndReplace(context.TODO(), bson.D{{Key: "_id", Value: pID}}, product).Decode(&newProduct)
 	if err != nil {

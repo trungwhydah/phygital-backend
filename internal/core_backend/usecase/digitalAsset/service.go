@@ -150,21 +150,15 @@ func (s *Service) ConstructMetadata(itemIndex int, orgTagName *string, product *
 		})
 		metadata.Attributes = append(metadata.Attributes, entity.MetadataAttribute{
 			TraitType: "Chất Liệu",
-			Value:     attribute.Stone.Name,
+			// TODO
+			Value: "attribute.Stone.Name",
 		})
 		metadata.Attributes = append(metadata.Attributes, entity.MetadataAttribute{
-			TraitType: "Chiều Dài",
-			Value:     attribute.SculptureLength,
+			TraitType: "Kích thước",
+			Value:     attribute.SculptureSize,
 		})
-		metadata.Attributes = append(metadata.Attributes, entity.MetadataAttribute{
-			TraitType: "Chiều Rộng",
-			Value:     attribute.SculptureWidth,
-		})
-		metadata.Attributes = append(metadata.Attributes, entity.MetadataAttribute{
-			TraitType: "Chiều Cao",
-			Value:     attribute.SculptureHeight,
-		})
-		metadata.Description = attribute.Description
+		// TODO:
+		metadata.Description = "attribute.Description"
 		metadata.AnimationURL = product.ThreeDimension.URL
 	case "astronaut":
 		metadata.Name = product.ProductName

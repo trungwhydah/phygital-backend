@@ -4,7 +4,7 @@ import (
 	"backend-service/internal/core_backend/api/handler"
 	"backend-service/internal/core_backend/api/presenter"
 	"backend-service/internal/core_backend/infrastructure/repository"
-	"backend-service/internal/core_backend/usecase/webPage"
+	webpage "backend-service/internal/core_backend/usecase/webPage"
 )
 
 // NewChipRepository new chip repository

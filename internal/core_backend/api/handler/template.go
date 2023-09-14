@@ -1,13 +1,12 @@
 package handler
 
 import (
-	"net/http"
-
 	"backend-service/internal/core_backend/api/handler/request"
 	"backend-service/internal/core_backend/api/presenter"
 	"backend-service/internal/core_backend/common"
 	validation "backend-service/internal/core_backend/infrastructure/validator"
 	"backend-service/internal/core_backend/usecase/template"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -146,4 +145,18 @@ func (h *templateHandler) UpdateTemplate(c *gin.Context) APIResponse {
 		return CreateResponse(err, http.StatusInternalServerError, "", common.MessageErrorUpdateTemplateFail, ok)
 	}
 	return HandlerResponse(http.StatusOK, "", "", ok)
+}
+
+func (h *templateHandler) CloneTemplate(c *gin.Context) APIResponse {
+	var req request.TemplateRequest
+	if err := c.ShouldBind(&req); err != nil {
+		return CreateResponse(err, http.StatusBadRequest, "", err.Error(), nil)
+	}
+
+	newTemplate, code, err := h.TemplateService.CloneTemplate(&req.TemplateID)
+	if err != nil {
+		return CreateResponse(err, code, "", err.Error(), nil)
+	}
+
+	return HandlerResponse(code, "", "", newTemplate)
 }

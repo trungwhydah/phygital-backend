@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"net/http"
-
 	validation "backend-service/internal/core_backend/infrastructure/validator"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 

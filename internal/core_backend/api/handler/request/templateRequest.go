@@ -1,5 +1,9 @@
 package request
 
+type TemplateRequest struct {
+	TemplateID string `json:"template_id" binding:"required"`
+}
+
 type TemplatePagesRequest struct {
 	PageID string `json:"page_id"`
 }
