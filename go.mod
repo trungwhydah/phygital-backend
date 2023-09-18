@@ -5,7 +5,7 @@ go 1.20
 require (
 	cloud.google.com/go/storage v1.33.0
 	firebase.google.com/go v3.13.0+incompatible
-	github.com/ethereum/go-ethereum v1.13.0
+	github.com/ethereum/go-ethereum v1.13.1
 	github.com/fatih/color v1.15.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/gin-gonic/gin v1.9.1
