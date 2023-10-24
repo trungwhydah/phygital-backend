@@ -14,7 +14,7 @@ require (
 	github.com/jinzhu/copier v0.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/nicksnyder/go-i18n/v2 v2.2.1
+	github.com/nicksnyder/go-i18n/v2 v2.2.2
 	github.com/rs/cors/wrapper/gin v0.0.0-20230905230807-20a76bd635d3
 	github.com/stretchr/testify v1.8.4
 	github.com/swaggo/files v1.0.1
