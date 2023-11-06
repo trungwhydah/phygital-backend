@@ -9,7 +9,7 @@ require (
 	github.com/fatih/color v1.15.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-playground/validator/v10 v10.15.3
+	github.com/go-playground/validator/v10 v10.16.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/joho/godotenv v1.5.1
